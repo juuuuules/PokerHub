@@ -1,0 +1,54 @@
+{% extends "layout.html" %} 
+
+{% block title %} Login {% endblock %} 
+
+{% block main%}
+    <div class="form-wrapper">
+        <div class="form-container">
+            <div class="form-left">
+                <h3>Welcome to PokerHub</h3>
+            </div>
+            <div class="form-right">
+                <div class="social-login">
+                    <div class="social-item">
+                        <div class="icon">
+                            <img src="images/google.png" alt="">
+                        </div>
+                        <div class="social-handle">
+                            Continue with Google
+                        </div>
+                    </div>
+                    <div class="social-item">
+                        <div class="icon">
+                            <img src="images/facebook.png" alt="">
+                        </div>
+                        <div class="social-handle">
+                            Continue with Facebook
+                        </div>
+                    </div>
+                </div>
+                <div class="login-form">
+                    <form action="/login" method="POST">
+                        <div class="user-input">
+                            <input type="email" placeholder="Email Address">
+                            <input type="password" placeholder="Password">
+                        </div>
+                        <div class="remember-me">
+                            <label for="">
+                                <input type="checkbox" name=""> Keep me signed in.
+                            </label>
+                        </div>
+                        <div class="btn-signin">
+                            <button class="btn submit-btn">Sign In</button>
+                        </div>
+                    </form>
+                    <a href="#" class="fp-link">Forget Password?</a>
+                    <div class="signup">
+                        <p>Don't have an account? <a href="/register">Sign Up</a> </p>
+                    </div> 
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
