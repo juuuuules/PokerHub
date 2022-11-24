@@ -15,7 +15,6 @@ app = Flask("__name__")
 """
 Routes
 """
-
 # home page
 @app.route("/")
 def index():
