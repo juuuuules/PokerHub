@@ -7,6 +7,7 @@ Imports
 """
 from flask import Flask, render_template, redirect, request, session
 from flask_session import Session
+import re
 
 from helpers import login_required
 # OPEN SOURCE TOOLS
@@ -60,7 +61,13 @@ def tips():
 def login():
     session.clear()
     if request.method == "POST":
-        session["name"] = request.form.get("name")
+        email = request.form.get("email")
+        password = request.form.get("password")
+        error_message = ""
+        if email == "" or password == "":
+            error_message = "Please fill out the required fields"
+            return render_template("login.html", error_message=error_message)
+
         return redirect("/")
     return render_template("login.html")
 
@@ -73,6 +80,39 @@ def register():
 @app.route("/logout", methods=["GET", "POST"])
 def logout():
     pass
+
+
+"""
+Helper functions
+"""
+
+# email validation
+
+
+def is_valid_email(email):
+    return bool(re.match(r'\b[A-Za-z0-9._%=-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b', email))
+
+# password validation
+
+
+def is_valid_password(password):
+    if len(password) < 5:
+        lower_case = False
+        upper_case = False
+        num = False
+        special = False
+        for char in password:
+            if char.isdigit():
+                num = True
+            if char.islower():
+                lower_case = True
+            if char.isupper():
+                upper_case = True
+            if not char.isalnum():
+                special = True
+        return lower_case and upper_case and num and special
+    else:
+        return False
 
 
 if __name__ == "__main__":
