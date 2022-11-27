@@ -5,11 +5,12 @@
 """
 Imports
 """
+import sqlite3
 from flask import Flask, render_template, redirect, request, session
 from flask_session import Session
-import re
+from werkzeug.security import generate_password_hash
 
-from helpers import login_required
+from helpers import login_required, is_valid_email, is_valid_password
 # OPEN SOURCE TOOLS
 # 1 - unsplash (open-source images)
 # 2 - coverr (open-source video)
@@ -25,6 +26,8 @@ app.config["SESSION_TYPE"] = "filesystem"
 
 Session(app)
 
+# configure database
+db = sqlite3.connect("poker.db")
 
 """
 Routes
@@ -32,6 +35,7 @@ Routes
 
 
 @app.route("/")
+@login_required
 def index():
     return render_template("index.html")
 
@@ -72,47 +76,62 @@ def login():
     return render_template("login.html")
 
 
+@app.route("/logout")
+def logout():
+    """Log user out"""
+
+    # Forget any user_id
+    session.clear()
+
+    # Redirect user to login form
+    return redirect("/")
+
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
+    if request.method == "POST":
+        email = request.form.get("email")
+        password = request.form.get("password")
+        confirmation = request.form.get("confirmation")
+        error_message = ""
+
+        if email == "" or password == "" or confirmation == "":
+            error_message = "Please fill out the required fields"
+            return render_template("register.html", error_message=error_message)
+
+        elif not is_valid_email(email):
+            error_message = "Please enter a valid email address"
+            return render_template("register.html", error_message=error_message)
+
+        elif not is_valid_password(password):
+            error_message = "Password must be at least 5 characters long and contain at least one number, one upper case letter, one lower case letter, and one special character."
+            return render_template("register.html", error_message=error_message)
+
+        elif password != confirmation:
+            error_message = "Passwords do not match."
+            return render_template("register.html", error_message=error_message)
+
+        # check if user already exists
+        rows = db.execute("SELECT * FROM users WHERE email = ?", email)
+
+        if len(rows) > 0:
+            error_message = "There is already an account registered with that email address."
+            return render_template("register.html", error_message=error_message)
+
+        # calculate password hash
+        hash = generate_password_hash(password)
+
+        # add user to database
+        db.execute("INSERT INTO users (email, hash) VALUES (?, ?)", email, hash)
+
+        return redirect("/")
+
     return render_template("register.html")
 
 
 @app.route("/logout", methods=["GET", "POST"])
 def logout():
     pass
-
-
-"""
-Helper functions
-"""
-
-# email validation
-
-
-def is_valid_email(email):
-    return bool(re.match(r'\b[A-Za-z0-9._%=-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b', email))
-
-# password validation
-
-
-def is_valid_password(password):
-    if len(password) < 5:
-        lower_case = False
-        upper_case = False
-        num = False
-        special = False
-        for char in password:
-            if char.isdigit():
-                num = True
-            if char.islower():
-                lower_case = True
-            if char.isupper():
-                upper_case = True
-            if not char.isalnum():
-                special = True
-        return lower_case and upper_case and num and special
-    else:
-        return False
 
 
 if __name__ == "__main__":
