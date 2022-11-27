@@ -27,7 +27,12 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 # configure database
-db = sqlite3.connect("poker.db")
+conn = sqlite3.connect("poker.db")
+db = conn.cursor()
+db.execute("""CREATE TABLE users
+    (id INTEGER PRIMARY KEY AUTOINCREMENT,
+    email TEXT NOT NULL,
+    hash INTEGER NOT NULL""")
 
 """
 Routes
