@@ -8,9 +8,10 @@ Imports
 import sqlite3
 from flask import Flask, render_template, redirect, request, session
 from flask_session import Session
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 
 from helpers import login_required, is_valid_email, is_valid_password
+
 # OPEN SOURCE TOOLS
 # 1 - unsplash (open-source images)
 # 2 - coverr (open-source video)
@@ -29,10 +30,6 @@ Session(app)
 # configure database
 conn = sqlite3.connect("poker.db")
 db = conn.cursor()
-db.execute("""CREATE TABLE users
-    (id INTEGER PRIMARY KEY AUTOINCREMENT,
-    email TEXT NOT NULL,
-    hash INTEGER NOT NULL""")
 
 """
 Routes
@@ -75,6 +72,14 @@ def login():
         error_message = ""
         if email == "" or password == "":
             error_message = "Please fill out the required fields"
+            return render_template("login.html", error_message=error_message)
+
+        # Query database for email
+        rows = db.execute("SELECT * FROM users WHERE email = ?", email)
+
+        # ensure email exists and password is correct
+        if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
+            error_message = "Please check your email and password."
             return render_template("login.html", error_message=error_message)
 
         return redirect("/")
