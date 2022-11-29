@@ -28,8 +28,9 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 # configure database
-conn = sqlite3.connect("poker.db")
+conn = sqlite3.connect("poker.db", check_same_thread=False)
 db = conn.cursor()
+
 
 """
 Routes
@@ -42,13 +43,20 @@ def index():
     return render_template("index.html")
 
 
-@app.route("/tips", methods=["GET", "POST"])
-@login_required
+@app.route("/log", methods=["GET", "POST"])
+# NOTE: FOR THE TIME BEING, making this NOT login required and making it show up in initial nav-bar.
+# CHANGE LATER.
 def log():
+    # add to session history
     if request.method == "POST":
+
         return redirect("/log")
-    else:
-        return render_template("/templates/log.html")
+
+    # display session and hand history
+    user_id = session["user_id"]
+    sessions = db.execute("SELECT * FROM sessions WHERE user_id = ?", user_id)
+    hands = db.execute("SELECT * FROM hands WHERE user_id = ?", user_id)
+    return render_template("log.html", sessions=sessions, hands=hands)
 
 
 @app.route("/odds", methods=["GET", "POST"])
@@ -81,6 +89,7 @@ def login():
         if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
             error_message = "Please check your email and password."
             return render_template("login.html", error_message=error_message)
+        session["user_id"] = rows[0]["id"]
 
         return redirect("/")
     return render_template("login.html")
@@ -122,8 +131,9 @@ def register():
             return render_template("register.html", error_message=error_message)
 
         # check if user already exists
-        rows = db.execute("SELECT * FROM users WHERE email = ?", email)
-
+        #
+        rows = db.execute(
+            "SELECT * FROM users WHERE email = ?", (email,)).fetchall()
         if len(rows) > 0:
             error_message = "There is already an account registered with that email address."
             return render_template("register.html", error_message=error_message)
@@ -132,16 +142,12 @@ def register():
         hash = generate_password_hash(password)
 
         # add user to database
-        db.execute("INSERT INTO users (email, hash) VALUES (?, ?)", email, hash)
-
+        db.execute("INSERT INTO users (email, hash) VALUES (?, ?)",
+                   (email, hash))
+        print(email, hash)
         return redirect("/")
 
     return render_template("register.html")
-
-
-@app.route("/logout", methods=["GET", "POST"])
-def logout():
-    pass
 
 
 if __name__ == "__main__":
