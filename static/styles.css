@@ -217,8 +217,10 @@ body {
 /* -------------------------------------- */
 /* Log */
 
-section {
-    background: #23242a;
+
+
+.edit {
+    background: var(--gray-light);
     min-height: 100vh;
     display: flex;
     justify-content: center;
@@ -232,8 +234,8 @@ section {
 }
 
 .select {
-    background: var(--gray-dark);
-    color: var(--white);
+    background: var(--black);
+    color: var(--yellow);
     justify-content: space-between;
     align-items: center;
     border: 2px solid var(--gray-dark);
