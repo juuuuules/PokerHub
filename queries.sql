@@ -1,12 +1,23 @@
 -- DROP TABLE users;
 
--- CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT NOT NULL, hash TEXT NOT NULL);
+-- CREATE TABLE users (
+--     id INTEGER PRIMARY KEY AUTOINCREMENT,
+--     email TEXT NOT NULL,
+--     hash TEXT NOT NULL
+-- );
 
 -- INSERT INTO users (email, hash) VALUES ('admin@example.com', 25);
 
 -- SELECT * FROM users
 
--- CREATE TABLE sessions (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, email TEXT NOT NULL, winnings INTEGER NOT NULL, time TIMESTAMP DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (user_id) REFERENCES users(id));
+-- CREATE TABLE sessions (
+--     id INTEGER PRIMARY KEY AUTOINCREMENT,
+--     user_id INTEGER NOT NULL,
+--     email TEXT NOT NULL,
+--     winnings INTEGER NOT NULL,
+--     time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+--     FOREIGN KEY (user_id) REFERENCES users(id)
+-- );
 
 -- DROP TABLE hands;
 
@@ -23,5 +34,5 @@
 
 -- SELECT email FROM users
 
-INSERT INTO users (email, hash) VALUES ("TEST@test.com", 23);
+-- INSERT INTO users (email, hash) VALUES ("TEST@test.com", 23);
 
