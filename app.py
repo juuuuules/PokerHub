@@ -27,10 +27,6 @@ app.config["SESSION_TYPE"] = "filesystem"
 
 Session(app)
 
-# configure database
-conn = sqlite3.connect("poker.db", check_same_thread=False)
-db = conn.cursor()
-
 
 """
 Routes
@@ -62,18 +58,23 @@ def log():
 @app.route("/odds", methods=["GET", "POST"])
 @login_required
 def odds():
-    return render_template("/templates/odds.html")
+    return render_template("odds.html")
 
 
 @app.route("/tips", methods=["GET", "POST"])
 @login_required
 def tips():
-    return render_template("/templates/tips.html")
+    return render_template("tips.html")
 
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
     session.clear()
+
+    # configure database
+    conn = sqlite3.connect("poker.db")
+    db = conn.cursor()
+
     if request.method == "POST":
         email = request.form.get("email")
         password = request.form.get("password")
@@ -108,6 +109,11 @@ def logout():
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
+
+    # configure database
+    conn = sqlite3.connect("poker.db")
+    db = conn.cursor()
+
     if request.method == "POST":
         email = request.form.get("email")
         password = request.form.get("password")
