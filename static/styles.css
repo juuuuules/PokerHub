@@ -222,10 +222,14 @@ body {
 .edit {
     background: var(--gray-light);
     min-height: 100vh;
+    max-width: 700px;
     display: flex;
+    margin-left: auto;
+    margin-right: auto;
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
+
 }
 
 /* Session Dropdown */
@@ -251,16 +255,19 @@ body {
 }
 
 .select:hover {
-    background: var(--gray-light);
+    background: var(--gray-dark);
 }
 
 .caret {
     width: 0;
     height: 0;
-    border-left: 5px solid transparent;
-    border-right: 5px solid transparent;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
     border-top: 6px solid var(--white);
     transition: 0.3s;
+    left: 97%;
+    top: 45%;
+    position: absolute;
 }
 
 .caret-rotate {
@@ -303,6 +310,13 @@ body {
     display: block;
     opacity: 1;
 }
+
+/* new session button */
+.btn-add-session {
+    margin-top: 20px;
+    text-align: middle;
+}
+
 
 /* Make responsive to change in screen size */
 @media (max-width: 678px) {
