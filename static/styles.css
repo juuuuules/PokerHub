@@ -1,0 +1,343 @@
+:root {
+    --yellow: #ffa31a;
+    --gray-light: #808080;
+    --gray-dark: #292929;
+    --black: #1b1b1b;
+    --white: #ffffff;
+}
+
+/* Universal Selector */
+
+* {
+    font-family: 'Source Sans Pro', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--gray-light);
+    width: 100vw;
+    height: 100vh;
+}
+
+/* Login Form */
+
+.form-wrapper {
+    max-width: 670px;
+    margin: 0 auto;
+}
+
+.form-container {
+    display: flex;
+    align-items: stretch;
+    color: var(--black);
+}
+
+/* Left of form */
+.form-left {
+    padding: 20px;
+    display: flex;
+    flex-basis: 50%;
+    flex-direction: column;
+    background: url("/static/images/poker-chips-background.jpg");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    position: relative;
+    text-align: center;
+    justify-content: center;
+}
+
+.form-left .content {
+    color: var(--yellow);
+    z-index: 9;
+    line-height: 48px;
+    position: relative;
+    margin-bottom: 50px;
+}
+
+.form-left .content h3 {
+    font-size: 48px;
+    font-weight: 1000;
+    letter-spacing: -0.5;
+    text-shadow: 3px 0 0 #000, 0 -3px 0 #000, 0 3px 0 #000, -3px 0 0 #000;
+}
+
+/* Right of form */
+.form-right {
+    flex-basis: 50%;
+    padding: 25px;
+    background-color: var(--white);
+    display: inline-block;
+}
+
+.social-login {
+    border-bottom: 4px solid var(--yellow);
+    margin-bottom: 10px;
+}
+
+.social-item {
+    display: flex;
+    margin-bottom: 20px;
+    padding: 20px 20px;
+    height: 40px;
+    align-items: center;
+    border: 1px solid var(--gray-light);
+    border-radius: 4px;
+    text-align: center;
+    width: 100%;
+
+}
+
+.social-item .icon {
+    flex-basis: 20%;
+}
+
+.social-item .icon img {
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+}
+
+.social-item .social-handle {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.login-form {
+    padding-top: 10px;
+}
+
+.user-input input {
+    padding: 8px;
+    width: 100%;
+    font-size: 14px;
+    font-weight: 500;
+    display: inline-block;
+    margin-bottom: 10px;
+    border: 1px solid var(--gray-light);
+}
+
+.user-input input:focus {
+    outline: none;
+    border-color: var(--yellow)
+}
+
+.remember-me {
+    margin-bottom: 20px;
+    padding: 10px 0;
+}
+
+.remember-me label {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px;
+}
+
+.remember-me label input {
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    border: 2px solid var(--black);
+    position: relative;
+}
+
+.remember-me label input:before {
+    content: "\2713";
+    font-size: 21px;
+    color: var(--white);
+    background-color: transparent;
+    width: 100%;
+    height: 100%;
+    left: 3px;
+    top: -4px;
+    visibility: none;
+    opacity: 0;
+}
+
+.remember-me label input:checked {
+    background-color: var(--yellow);
+}
+
+.remember-me label input:checked:before {
+    visibility: visible;
+    opacity: 1;
+}
+
+.btn-signin {
+    text-align: middle;
+}
+
+.btn {
+    width: 100%;
+    display: flex;
+    cursor: pointer;
+    color: var(--white);
+    background-color: var(--yellow);
+    padding: 0 20px;
+    height: 40px;
+    border: 3px solid var(--black);
+    border-radius: 4px;
+    margin-bottom: 20px;
+    text-transform: capitalize;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn:hover {
+    opacity: 0.9;
+}
+
+.fp-link {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--black);
+    text-decoration: none;
+}
+
+.fp-link:hover {
+    color: var(--yellow);
+}
+
+.signup {
+    margin-top: 20px;
+}
+
+.signup p {
+    font-size: 14px;
+    color: var(--black);
+}
+
+.signup p a:hover {
+    color: var(--yellow)
+}
+
+/* -------------------------------------- */
+/* Log */
+
+section {
+    background: #23242a;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* Session Dropdown */
+.dropdown {
+    box-sizing: border-box;
+}
+
+.select {
+    background: var(--gray-dark);
+    color: var(--white);
+    justify-content: space-between;
+    align-items: center;
+    border: 2px solid var(--gray-dark);
+    border-radius: 4px;
+    padding: 1em;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.select-clicked {
+    border: 2px var(--yellow) solid;
+    box-shadow: 0 0 0.8em var(--yellow);
+}
+
+.select:hover {
+    background: var(--gray-light);
+}
+
+.caret {
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 6px solid var(--white);
+    transition: 0.3s;
+}
+
+.caret-rotate {
+    transform: rotate(180deg);
+}
+
+.menu {
+    list-style: none;
+    padding: 0.2em 0.5em;
+    background: var(--gray-light);
+    box-shadow: 0 0.5em 1em rgba(0, 0, 0, 0.2);
+    color: #9fa5b5;
+    position: absolute;
+    top: 3em;
+    left: 50%;
+    width: 100%;
+    transform: translateX(-50%);
+    opacity: 0;
+    display: none;
+    transition: 0.2s;
+    z-index: 1;
+}
+
+.menu li {
+    padding: 0.7em 0.5em;
+    margin: 0.3em 0;
+    border-radius: 0.5em;
+    cursor: pointer;
+}
+
+.menu li:hover {
+    background: var(--gray-dark);
+}
+
+.active {
+    background: #23242a;
+}
+
+.menu-open {
+    display: block;
+    opacity: 1;
+}
+
+/* Make responsive to change in screen size */
+@media (max-width: 678px) {
+    body {
+        padding: 0;
+        margin: 0;
+    }
+
+    .form-wrapper {
+        max-width: 400px;
+    }
+
+    .form-container {
+        position: relative;
+    }
+
+    .form-left .content {
+        display: none;
+    }
+
+    .form-left {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+    }
+
+    .form-right {
+        display: flex;
+        flex-basis: 100%;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .social-item .social-handle {
+        font-weight: bold;
+        font-size: 10px;
+    }
+}
