@@ -31,80 +31,7 @@ Session(app)
 """
 Routes
 """
-
-
-@app.route("/")
-@login_required
-def index():
-    return render_template("index.html")
-
-
-@app.route("/log", methods=["GET", "POST"])
-# NOTE: FOR THE TIME BEING, making this NOT login required and making it show up in initial nav-bar.
-# CHANGE LATER.
-def log():
-    # add to session history
-    if request.method == "POST":
-
-        return redirect("/log")
-
-    # display session and hand history
-    user_id = session["user_id"]
-    sessions = db.execute("SELECT * FROM sessions WHERE user_id = ?", user_id)
-    hands = db.execute("SELECT * FROM hands WHERE user_id = ?", user_id)
-    return render_template("log.html", sessions=sessions, hands=hands)
-
-
-@app.route("/odds", methods=["GET", "POST"])
-@login_required
-def odds():
-    return render_template("odds.html")
-
-
-@app.route("/tips", methods=["GET", "POST"])
-@login_required
-def tips():
-    return render_template("tips.html")
-
-
-@app.route("/login", methods=["GET", "POST"])
-def login():
-    session.clear()
-
-    # configure database
-    conn = sqlite3.connect("poker.db")
-    db = conn.cursor()
-
-    if request.method == "POST":
-        email = request.form.get("email")
-        password = request.form.get("password")
-        error_message = ""
-        if email == "" or password == "":
-            error_message = "Please fill out the required fields"
-            return render_template("login.html", error_message=error_message)
-
-        # Query database for email
-        rows = db.execute("SELECT * FROM users WHERE email = ?", email)
-
-        # ensure email exists and password is correct
-        if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
-            error_message = "Please check your email and password."
-            return render_template("login.html", error_message=error_message)
-        session["user_id"] = rows[0]["id"]
-
-        return redirect("/")
-    return render_template("login.html")
-
-
-@app.route("/logout")
-def logout():
-    """Log user out"""
-
-    # Forget any user_id
-    session.clear()
-
-    # Redirect user to login form
-    return redirect("/")
+# register user
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -150,10 +77,90 @@ def register():
         # add user to database
         db.execute("INSERT INTO users (email, hash) VALUES (?, ?)",
                    (email, hash))
-        print(email, hash)
+        conn.commit()
+
         return redirect("/")
 
     return render_template("register.html")
+
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    session.clear()
+
+    # configure database
+    conn = sqlite3.connect("poker.db")
+    db = conn.cursor()
+
+    if request.method == "POST":
+        email = request.form.get("email")
+        password = request.form.get("password")
+        error_message = ""
+        if email == "" or password == "":
+            error_message = "Please fill out the required fields"
+            return render_template("login.html", error_message=error_message)
+
+        # Query database for email
+        rows = db.execute(
+            "SELECT * FROM users WHERE email = ?", (email,)).fetchall()
+
+        # ensure email exists and password is correct
+        if len(rows) != 1 or not check_password_hash(rows[0][2], request.form.get("password")):
+            error_message = "Please check your email and password."
+            return render_template("login.html", error_message=error_message)
+        session["user_id"] = rows[0][0]
+
+        return redirect("/")
+    return render_template("login.html")
+
+
+@app.route("/logout")
+def logout():
+    """Log user out"""
+
+    # Forget any user_id
+    session.clear()
+
+    # Redirect user to login form
+    return redirect("/")
+
+
+@app.route("/")
+@login_required
+def index():
+    return render_template("index.html")
+
+
+@app.route("/log", methods=["GET", "POST"])
+@login_required
+def log():
+    # configure database
+    conn = sqlite3.connect("poker.db")
+    db = conn.cursor()
+
+    # add to session history
+    if request.method == "POST":
+        return redirect("/log")
+
+    # display session and hand history
+    user_id = session["user_id"]
+    sessions = db.execute(
+        "SELECT * FROM sessions WHERE user_id = ?", (user_id,)).fetchall()
+    hands = db.execute(
+        "SELECT * FROM hands WHERE user_id = ?", (user_id,)).fetchall()
+    return render_template("log.html", sessions=sessions, hands=hands)
+
+
+@app.route("/odds", methods=["GET", "POST"])
+@login_required
+def odds():
+    return render_template("odds.html")
+
+
+@app.route("/tips", methods=["GET", "POST"])
+@login_required
+def tips():
+    return render_template("tips.html")
 
 
 if __name__ == "__main__":

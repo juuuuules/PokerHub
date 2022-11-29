@@ -8,7 +8,7 @@
 
 -- INSERT INTO users (email, hash) VALUES ('admin@example.com', 25);
 
--- SELECT * FROM users
+SELECT * FROM users
 
 -- CREATE TABLE sessions (
 --     id INTEGER PRIMARY KEY AUTOINCREMENT,

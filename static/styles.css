@@ -214,11 +214,54 @@ body {
     color: var(--yellow)
 }
 
+/* -------------------------------------- */
+/* Log */
 
+/* Session Dropdown */
+.dropdown {
+    box-sizing: border-box;
 
+}
 
+.select {
+    background: var(--gray-dark);
+    color: var(--white);
+    justify-content: space-between;
+    align-items: center;
+    border: 2px solid var(--gray-dark);
+    border-radius: 4px;
+    padding: 1em;
+    cursor: pointer;
+    transition: background 0.3s;
+}
 
+.select-clicked {
+    border: 2px var(--yellow) solid;
+    box-shadow: 0 0 0.8em var(--yellow);
+}
 
+.select:hover {
+    background: var(--gray-light);
+}
+
+.caret {
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 6px solid var(--white);
+    transition: 0.3s;
+}
+
+.caret-rotate {
+    transform: rotate(180deg);
+}
+
+.menu {
+    list-style: none;
+    padding: 0.2em 0.5em;
+    background: var(--gray-light) box-shadow: 0 0.5em 1em
+}
 
 /* Make responsive to change in screen size */
 @media (max-width: 678px) {
