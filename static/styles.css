@@ -349,7 +349,7 @@ nav {
     padding-top: 1%;
 }
 
-p {
+.body {
     font-family: "Lucida Console", "Courier New", monospace;
     font-size: calc(8px + 1vw);
     padding-top: 1%;
@@ -365,13 +365,13 @@ footer {
     padding-right: 2%
 }
 
-img {
+.round_image {
     border-radius: 7%;
     padding: 1%;
     width: 90%;
 }
 
-h6 {
+.title3 {
     font-family: "Lucida Console", "Courier New", monospace;
     font-size: calc(7px + 1vw);
 }
