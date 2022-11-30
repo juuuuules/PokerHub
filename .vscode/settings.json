@@ -12,5 +12,5 @@
     "[html]": {
         "editor.formatOnSave": false
     },
-    "window.zoomLevel": -1
+    "window.zoomLevel": 0
 }
