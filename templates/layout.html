@@ -29,7 +29,7 @@
 		<title>PokerHub: {% block title %}{% endblock %}</title>
 	</head>
 	<body>
-        <nav class="bg-light border navbar navbar-expand-md navbar-light">
+        <nav class="border navbar navbar-expand-md navbar-light">
             <div class="container-fluid">
                 <a class="navbar-brand" href="/">PokerHub</span></a>
                 <button aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-bs-target="#navbar" data-bs-toggle="collapse" type="button">
@@ -38,7 +38,8 @@
                 <div class="collapse navbar-collapse" id="navbar">
                     {% if session["user_id"] %}
                         <ul class="navbar-nav me-auto mt-2">
-                            <li class="nav-item"><a class="nav-link" href="/tips">Quote</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/">How to Play</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/tips">Tips and Tricks</a></li>
                             <li class="nav-item"><a class="nav-link" href="/odds">Odds Calculator</a></li>
                             <li class="nav-item"><a class="nav-link" href="/log">Hand History</a></li>
                         </ul>
@@ -63,8 +64,8 @@
         <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
         <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
         
-        <footer class="py-5 bg-light">
-            © Copyright 2022 Julien Berman, Zakarias Erdos, and Rajan Bhargava. All rights reserved.
+        <footer class="py-3">
+            Created by Julien Berman, Rajan Bhargava, and Ollie Erdos
         </footer>
 	</body>
 </html>

@@ -1,6 +1,6 @@
 :root {
     --yellow: #ffa31a;
-    --gray-light: #808080;
+    --gray-light: #c8c8c8;
     --gray-dark: #292929;
     --black: #1b1b1b;
     --white: #ffffff;
@@ -340,4 +340,50 @@ section {
         font-weight: bold;
         font-size: 10px;
     }
+}
+
+nav {
+    background-color: beige;
+}
+
+h1 {
+    font-family: "Times New Roman", Times, serif;
+    font-size: calc(12px + 2vw);
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 2.5%;
+    padding-bottom: 0.5%;
+}
+
+h2 {
+    font-family: "Times New Roman", Times, serif;
+    font-size: calc(10px + 1.5vw);
+    padding-top: 1%;
+}
+
+p {
+    font-family: "Lucida Console", "Courier New", monospace;
+    font-size: calc(8px + 1vw);
+    padding-top: 1%;
+    padding-bottom: 1%;
+    margin-left: auto;
+    margin-right: auto;
+    float: left;
+}
+
+footer {
+    background-color: beige;
+    padding-left: 2%;
+    padding-right: 2%
+}
+
+img {
+    border-radius: 7%;
+    padding: 1%;
+    width: 90%;
+}
+
+h6 {
+    font-family: "Lucida Console", "Courier New", monospace;
+    font-size: calc(7px + 1vw);
 }
