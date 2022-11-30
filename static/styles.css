@@ -229,12 +229,19 @@ body {
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
-
+    flex-direction: column;
 }
 
 /* Session Dropdown */
 .dropdown {
     box-sizing: border-box;
+}
+
+.tub {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
 }
 
 .select {
@@ -244,7 +251,8 @@ body {
     align-items: center;
     border: 2px solid var(--gray-dark);
     border-radius: 4px;
-    padding: 1em;
+    padding: 8px;
+    width: 500px;
     cursor: pointer;
     transition: background 0.3s;
 }
@@ -277,9 +285,9 @@ body {
 .menu {
     list-style: none;
     padding: 0.2em 0.5em;
-    background: var(--gray-light);
+    background: var(--gray-dark);
     box-shadow: 0 0.5em 1em rgba(0, 0, 0, 0.2);
-    color: #9fa5b5;
+    color: var(--yellow);
     position: absolute;
     top: 3em;
     left: 50%;
@@ -313,9 +321,14 @@ body {
 
 /* new session button */
 .btn-add-session {
-    margin-top: 20px;
+    margin-right: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 10px;
     text-align: middle;
 }
+
+
 
 
 /* Make responsive to change in screen size */
