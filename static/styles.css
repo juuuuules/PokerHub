@@ -217,13 +217,19 @@ body {
 /* -------------------------------------- */
 /* Log */
 
-section {
-    background: #23242a;
+
+
+.edit {
+    background: var(--gray-light);
     min-height: 100vh;
+    max-width: 700px;
     display: flex;
+    margin-left: auto;
+    margin-right: auto;
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
+    flex-direction: column;
 }
 
 /* Session Dropdown */
@@ -231,14 +237,22 @@ section {
     box-sizing: border-box;
 }
 
+.tub {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
+
 .select {
-    background: var(--gray-dark);
-    color: var(--white);
+    background: var(--black);
+    color: var(--yellow);
     justify-content: space-between;
     align-items: center;
     border: 2px solid var(--gray-dark);
     border-radius: 4px;
-    padding: 1em;
+    padding: 8px;
+    width: 500px;
     cursor: pointer;
     transition: background 0.3s;
 }
@@ -249,16 +263,19 @@ section {
 }
 
 .select:hover {
-    background: var(--gray-light);
+    background: var(--gray-dark);
 }
 
 .caret {
     width: 0;
     height: 0;
-    border-left: 5px solid transparent;
-    border-right: 5px solid transparent;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
     border-top: 6px solid var(--white);
     transition: 0.3s;
+    left: 97%;
+    top: 45%;
+    position: absolute;
 }
 
 .caret-rotate {
@@ -268,9 +285,9 @@ section {
 .menu {
     list-style: none;
     padding: 0.2em 0.5em;
-    background: var(--gray-light);
+    background: var(--gray-dark);
     box-shadow: 0 0.5em 1em rgba(0, 0, 0, 0.2);
-    color: #9fa5b5;
+    color: var(--yellow);
     position: absolute;
     top: 3em;
     left: 50%;
@@ -301,6 +318,18 @@ section {
     display: block;
     opacity: 1;
 }
+
+/* new session button */
+.btn-add-session {
+    margin-right: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    text-align: middle;
+}
+
+
+
 
 /* Make responsive to change in screen size */
 @media (max-width: 678px) {
