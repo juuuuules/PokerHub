@@ -6,11 +6,11 @@
 Imports
 """
 import sqlite3
-from flask import Flask, render_template, redirect, request, session
+from flask import Flask, render_template, redirect, request, session, jsonify
 from flask_session import Session
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from helpers import login_required, is_valid_email, is_valid_password
+from helpers import login_required, is_valid_email, is_valid_password, usd
 
 # OPEN SOURCE TOOLS
 # 1 - unsplash (open-source images)
@@ -20,6 +20,9 @@ from helpers import login_required, is_valid_email, is_valid_password
 
 # configure application
 app = Flask("__name__")
+
+# Custom filter
+app.jinja_env.filters["usd"] = usd
 
 # configure session to use filesystem instead of cookies
 app.config["SESSION_PERMANENT"] = False
@@ -138,27 +141,71 @@ def log():
     conn = sqlite3.connect("poker.db")
     db = conn.cursor()
 
-    # add to session history
-    if request.method == "POST":
-        return redirect("/log")
-
     # display session and hand history
     user_id = session["user_id"]
     sessions = db.execute(
         "SELECT * FROM sessions WHERE user_id = ?", (user_id,)).fetchall()
     hands = db.execute(
         "SELECT * FROM hands WHERE user_id = ?", (user_id,)).fetchall()
+    print(hands)
     return render_template("log.html", sessions=sessions, hands=hands)
 
 
-@app.route("/odds", methods=["GET", "POST"])
-@login_required
+@app.route("/ajax_add", methods=["POST", "GET"])
+def ajax_add():
+    # configure database
+    conn = sqlite3.connect("poker.db")
+    db = conn.cursor()
+    if request.method == "POST":
+        user_id = session["user_id"]
+        session_id = request.form["txtsession"]
+        hand = request.form["txthand"]
+        result = request.form["txtresult"].upper()
+        potsize = request.form["txtpot"]
+        if hand == "":
+            msg = "Please input a hand."
+        elif result == "":
+            msg = "Please input a result."
+        elif potsize == "":
+            msg = "Please input the size of the pot."
+        else:
+            db.execute("INSERT INTO hands (user_id, session_id, user_hand, result, pot_size) VALUES (?,?,?,?, ?)", [
+                user_id, session_id, hand, result, usd(potsize)])
+            conn.commit()
+            msg = "New Hand Created Successfully."
+    return jsonify(msg)
+
+
+@app.route("/ajax_update", methods=["POST", "GET"])
+def ajax_update():
+    # configure database
+    conn = sqlite3.connect("poker.db")
+    db = conn.cursor()
+    if request.method == "POST":
+        string = request.form["string"]
+        hand = request.form["txthand"]
+        result = request.form["txtresult"]
+        pot_size = request.form["txtpot"]
+        print(string)
+
+        # update database
+        db.execute("UPDATE hands SET hand = %s, result = %s, pot_size = %s", [
+                   hand, result, usd(pot_size)])
+        conn.commit()
+        db.close()
+
+        msg = "Hand Updated Successfully."
+    return jsonify(msg)
+
+
+@ app.route("/odds", methods=["GET", "POST"])
+@ login_required
 def odds():
     return render_template("odds.html")
 
 
-@app.route("/tips", methods=["GET", "POST"])
-@login_required
+@ app.route("/tips", methods=["GET", "POST"])
+@ login_required
 def tips():
     return render_template("tips.html")
 
