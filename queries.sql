@@ -32,7 +32,10 @@
 --     FOREIGN KEY (session_id) REFERENCES sessions(id)
 -- ); 
 
-SELECT * FROM hands;
+-- DELETE FROM hands WHERE user_hand = "J5s";
 
--- INSERT INTO users (email, hash) VALUES ("TEST@test.com", 23);
+-- INSERT INTO hands (user_id, session_id, user_hand, result, pot_size) VALUES (2, 1, "AKo", "WIN", "$10");
+-- INSERT INTO hands (user_id, session_id, user_hand, result, pot_size) VALUES (2, 1, "J10d", "WIN", "$10");
+-- INSERT INTO hands (user_id, session_id, user_hand, result, pot_size) VALUES (2, 1, "77", "WIN", "$10");
 
+-- DELETE FROM hands WHERE pot_size = "$10$";
