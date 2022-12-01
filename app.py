@@ -151,6 +151,11 @@ def log():
     return render_template("log.html", sessions=sessions, hands=hands)
 
 
+@app.route("/ajax_add", methods=["POST", "GET"])
+def ajax_add():
+    return render_template("index.html")
+
+
 @app.route("/odds", methods=["GET", "POST"])
 @login_required
 def odds():
