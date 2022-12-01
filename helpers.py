@@ -42,3 +42,8 @@ def is_valid_password(password):
         return lower_case and upper_case and num and special
     else:
         return False
+
+
+def usd(value):
+    """Format value as USD."""
+    return f"${float(value):,.2f}"

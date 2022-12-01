@@ -39,3 +39,4 @@
 -- INSERT INTO hands (user_id, session_id, user_hand, result, pot_size) VALUES (2, 1, "77", "WIN", "$10");
 
 -- DELETE FROM hands WHERE pot_size = "$10$";
+
