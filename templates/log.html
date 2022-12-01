@@ -11,6 +11,52 @@ t{% extends "layout.html" %}
         </button>
     </div>
     {% endif %}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('[data-toggle="tooltip"]').tooltip();
+            var actions=$("table td:last-child").html();
+
+            // append table with add row form on add new button Click
+            $(".add-new").click(function(){
+                $(this).attr("disabled", "disabled");
+                var index = $("table tbody tr:last-child").index();
+                var row = '<tr>' +
+                    '<td><input type=text class="form-control" name="hand" id="txthand"></td>' +
+                    '<td><input type=text class="form-control" name="result" id="txtresult"></td>' +
+                    '<td><input type=text class="form-control" name="pot-size" id="txtpot"></td>' +
+                    '<td>' + actions + '</td>' +
+                    '</tr>';
+                $("table").append(row);
+                $("table tbody tr").eq(index + 1).find(".add, .cancel, .edit, .delete").toggle();
+                $('[data-toggle="tooltip"]').tooltip();
+            });
+
+            // Add row on add button Click
+            $(document).on("click", ".add", function(){
+             /*   $.post("/ajax_add", {name: "Donald Duck", city: "Duckburg"}, function(data){
+                    alert("Data: " + data);
+                }); */
+                var empty = false;
+                var input = $(this).parents("tr").find('input[type="text"]');
+                input.each(function() {
+                    if(!$(this).val()) {
+                        $(this).addClass("error");
+                        empty = true;
+                    } else {
+                        $(this).removeClass("error");
+                    }
+                });
+                var txthand = $("#txthand").val();
+                var txtresult = $("#txtresult").val();
+                var txtpot = $("#txtpot").val();
+                var session_id = 111111; // NOTE: in future, make this {{ session.id }}
+                $.post("/ajax_add", {txthand: txthand, txtresult: txtresult, txtpot: txtpot, seesion_id = session_id}, function(data){
+                   $("#displaymessage").html(data);
+                   // $("#displaymessage").show();
+                });
+            });
+        });
+    </script>
     <section class="h">   
         <div class="heading-wrapper">
             <h3 class="heading">Session Log. Click the dropdowns to view your hand history!</h3>
@@ -80,49 +126,5 @@ t{% extends "layout.html" %}
             </div>
         </div>
     </section>
-    <script type="text/javascript">
-        $(document).ready(function(){
-            $('[data-toggle="tooltip"]').tooltip();
-            var actions=$("table td:last-child").html();
 
-            // append table with add row form on add new button Click
-            $(".add-new").click(function(){
-                $(this).attr("disabled", "disabled");
-                var index = $("table tbody tr:last-child").index();
-                var row = '<tr>' +
-                    '<td><input type=text class="form-control" name="hand" id="txthand"></td>' +
-                    '<td><input type=text class="form-control" name="result" id="txtresult"></td>' +
-                    '<td><input type=text class="form-control" name="pot-size" id="txtpot"></td>' +
-                    '<td>' + actions + '</td>' +
-                    '</tr>';
-                $("table").append(row);
-                $("table tbody tr").eq(index + 1).find(".add, .cancel, .edit, .delete").toggle();
-                $('[data-toggle="tooltip"]').tooltip();
-            });
-
-            // Add row on add button Click
-            $(document).on("click", ".add", function(){
-                $.post("/ajax_add", {name: "Donald Duck", city: "Duckburg"}, function(data){
-                    alert("Data: " + data);
-                });
-                /*var empty = false;
-                var input = $(this).parents("tr").find('input[type="text"]');
-                input.each(function() {
-                    if(!$(this).val()) {
-                        $(this).addClass("error");
-                        empty = true;
-                    } else {
-                        $(this).removeClass("error");
-                    }
-                });
-                var txthand = $("#txthand").val();
-                var txtresult = $("#txtresult").val();
-                var txtpot = $("#txtpot").val();
-                $.post("/ajax_add", {txthand: txthand, txtresult: txtresult, txtpot: txtpot}, function(data){
-                   $("#displaymessage").html(data);
-                   // $("#displaymessage").show();
-                }); */
-            });
-        });
-    </script>
 {% endblock %}

@@ -6,7 +6,7 @@
 Imports
 """
 import sqlite3
-from flask import Flask, render_template, redirect, request, session
+from flask import Flask, render_template, redirect, request, session, jsonify
 from flask_session import Session
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -153,17 +153,29 @@ def log():
 
 @app.route("/ajax_add", methods=["POST", "GET"])
 def ajax_add():
-    return render_template("index.html")
+    conn = sqlite3.connect("poker.db")
+    db = conn.cursor()
+    if request.method == "POST":
+        user_id = session["user_id"]
+        session_id = request.form["sessionid"]
+        hand = request.form["txthand"]
+        result = request.form["txtresult"]
+        potsize = request.form["txtpot"]
+        print(hand)
+        db.execute("INSERT INTO hands (user_id, session_id, user_hand, result, pot_size) VALUES (?,?,?,?, ?)", [
+                   user_id, session_id, hand, result, potsize])
+        msg = "New Hand Created Successfully"
+    return jsonify(msg)
 
 
-@app.route("/odds", methods=["GET", "POST"])
-@login_required
+@ app.route("/odds", methods=["GET", "POST"])
+@ login_required
 def odds():
     return render_template("odds.html")
 
 
-@app.route("/tips", methods=["GET", "POST"])
-@login_required
+@ app.route("/tips", methods=["GET", "POST"])
+@ login_required
 def tips():
     return render_template("tips.html")
 
