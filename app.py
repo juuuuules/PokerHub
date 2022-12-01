@@ -157,14 +157,15 @@ def ajax_add():
     db = conn.cursor()
     if request.method == "POST":
         user_id = session["user_id"]
-        session_id = request.form["sessionid"]
+        session_id = request.form["txtsession"]
         hand = request.form["txthand"]
         result = request.form["txtresult"]
         potsize = request.form["txtpot"]
-        print(hand)
+        print("THIS SHOULD PRINT")
         db.execute("INSERT INTO hands (user_id, session_id, user_hand, result, pot_size) VALUES (?,?,?,?, ?)", [
                    user_id, session_id, hand, result, potsize])
-        msg = "New Hand Created Successfully"
+        conn.commit()
+        msg = "New Hand Created Successfully."
     return jsonify(msg)
 
 

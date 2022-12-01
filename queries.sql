@@ -21,18 +21,18 @@
 
 -- DROP TABLE hands;
 
-CREATE TABLE hands (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER NOT NULL,
-    session_id INTEGER NOT NULL,
-    user_hand TEXT NOT NULL,
-    result TEXT NOT NULL,
-    pot_size TEXT NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (session_id) REFERENCES sessions(id)
-); 
+-- CREATE TABLE hands (
+--     id INTEGER PRIMARY KEY AUTOINCREMENT,
+--     user_id INTEGER NOT NULL,
+--     session_id INTEGER NOT NULL,
+--     user_hand TEXT NOT NULL,
+--     result TEXT NOT NULL,
+--     pot_size TEXT NOT NULL,
+--     FOREIGN KEY (user_id) REFERENCES users(id),
+--     FOREIGN KEY (session_id) REFERENCES sessions(id)
+-- ); 
 
--- SELECT email FROM users
+SELECT * FROM hands;
 
 -- INSERT INTO users (email, hash) VALUES ("TEST@test.com", 23);
 

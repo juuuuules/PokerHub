@@ -24,6 +24,7 @@ t{% extends "layout.html" %}
                     '<td><input type=text class="form-control" name="hand" id="txthand"></td>' +
                     '<td><input type=text class="form-control" name="result" id="txtresult"></td>' +
                     '<td><input type=text class="form-control" name="pot-size" id="txtpot"></td>' +
+                    '<td><input type=text class="form-control" name="session-id" id="txtsession"></td>' +
                     '<td>' + actions + '</td>' +
                     '</tr>';
                 $("table").append(row);
@@ -49,8 +50,9 @@ t{% extends "layout.html" %}
                 var txthand = $("#txthand").val();
                 var txtresult = $("#txtresult").val();
                 var txtpot = $("#txtpot").val();
-                var session_id = 111111; // NOTE: in future, make this {{ session.id }}
-                $.post("/ajax_add", {txthand: txthand, txtresult: txtresult, txtpot: txtpot, seesion_id = session_id}, function(data){
+                var txtsession = $("#txtsession").val();
+                //var session_id = 111111; // NOTE: in future, make this {{ session.id }} session_id = session_id
+                $.post("/ajax_add", {txthand: txthand, txtresult: txtresult, txtpot: txtpot, txtsession: txtsession}, function(data){
                    $("#displaymessage").html(data);
                    // $("#displaymessage").show();
                 });
