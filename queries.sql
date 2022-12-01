@@ -40,3 +40,4 @@
 
 -- DELETE FROM hands WHERE pot_size = "$10$";
 
+SELECT * FROM hands
