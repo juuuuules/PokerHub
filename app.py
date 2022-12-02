@@ -201,9 +201,8 @@ def ajax_update():
 @ app.route("/odds", methods=["GET", "POST"])
 @ login_required
 def odds():
-    return render_template("apology.html")
     if request.method == "GET":
-        return render_template("apology.html")
+        return render_template("odds.html")
     else:
         user1 = request.form.get("user1")
         user2 = request.form.get("user2")
