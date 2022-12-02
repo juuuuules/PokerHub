@@ -266,6 +266,11 @@ nav {
     font-size: calc(7px + 1vw);
 }
 
+.float_up {
+    padding-top: .05%;
+    float: top;
+}
+
 /* -------------------------------------- */
 /* Log Page */
 
