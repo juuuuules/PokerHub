@@ -3,7 +3,21 @@
 {% block title %} Results {% endblock %}
 
 {% block main%}
-    <div class = "central-container">
-        <img class="round_image" src= {{ User1 }} alt="Pocket Aces">
+    <div class = "row">
+        <div class="col-sm">
+            <img class="round_image" src="/static/images/{{ user1 }}.png" alt="Your First Cards">
+        </div>
+        <div class="col-sm">
+            <img class="round_image" src="/static/images/{{ user2 }}.png" alt="Your Second Card">
+        </div>
+    </div>
+    <div class = "row">
+        <div class="col-sm">
+            <img class="round_image" src="/static/images/{{ opp1 }}.png" alt="Your Opponent's First Card">
+        </div>
+        <div class="col-sm">
+            <img class="round_image" src="/static/images/{{ opp2 }}.png" alt="Your Opponent's Second Card">
+        </div>
     </div>
 {% endblock %}
+
