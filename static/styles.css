@@ -536,8 +536,9 @@ table.table td .cancel {
     width: 500px;
 }
 
-.center {
-    margin: auto;
+.block {
+    display: block;
+    width: 100%;
 }
 
 
