@@ -31,6 +31,10 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 
+# list of possible cards
+deck = ["2h", "3h", "4h", "5h", "6h", "7h", "8h", "9h", "10h", "Jh", "Qh", "Kh", "Ah", "2d", "3d", "4d", "5d", "6d", "7d", "8d", "9d", "10d", "Jd", "Qd", "Kd",
+        "Ad", "2s", "3s", "4s", "5s", "6s", "7s", "8s", "9s", "10s", "Js", "Qs", "Ks", "As", "2c", "3c", "4c", "5c", "6c", "7c", "8c", "9c", "10c", "Jc", "Qc", "Kc", "Ac"]
+
 """
 Routes
 """
@@ -214,7 +218,9 @@ def odds():
         board4 = request.form.get("board4")
         board5 = request.form.get("board5")
         if not user1 or not user2 or not opp1 or not opp2:
-            return apology("missing hands")
+            return apology("Missing Hangs")
+        if user1 not in deck or user2 not in deck or opp1 not in deck or opp2 not in deck or board1 not in deck or board2 not in deck or board3 not in deck or board4 not in deck or board5 not in deck:
+            return apology("Invalid Cards")
 
 
 @ app.route("/tips", methods=["GET", "POST"])
