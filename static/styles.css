@@ -541,6 +541,11 @@ table.table td .cancel {
     width: 100%;
 }
 
+.central-container {
+    width: 50%;
+    height: 70%;
+    border: 10px var(--black);
+}
 
 /* Make responsive to change in screen size */
 @media (max-width: 678px) {
