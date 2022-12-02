@@ -545,6 +545,7 @@ table.table td .cancel {
     width: 50%;
     height: 70%;
     border: 10px var(--black);
+    border-radius: 2px;
     text-align: middle;
 }
 
