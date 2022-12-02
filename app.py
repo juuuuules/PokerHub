@@ -214,7 +214,8 @@ def odds():
         board4 = request.form.get("board4")
         board5 = request.form.get("board5")
         if not user1 or not user2 or not opp1 or not opp2:
-            return render_template("apology.html")
+            pass
+        return render_template("apology.html")
 
 
 @ app.route("/tips", methods=["GET", "POST"])
