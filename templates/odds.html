@@ -10,13 +10,8 @@
     </div>
     <form action="/odds" method="post">
         <div class="mb-3">
-            <select class="form-select mx-auto w-auto" name="symbol">
-                <option selected=>Stock Symbol</option>"
-            </select>
+            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="card1" placeholder="Card 1">
         </div>
-        <div class="mb-3">
-            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" min="0" name="shares" placeholder="Number of Shares" type="number">
-        </div>
-        <button class="btn btn-primary" type="submit">Sell</button>
+        <button class="btn btn-primary" type="submit">Submit Hands</button>
     </form>
 {% endblock %}
