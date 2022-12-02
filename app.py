@@ -221,7 +221,7 @@ def odds():
             return apology("Missing Hangs")
         if user1 not in deck or user2 not in deck or opp1 not in deck or opp2 not in deck or board1 not in deck or board2 not in deck or board3 not in deck or board4 not in deck or board5 not in deck:
             return apology("Invalid Cards")
-        return render_template("results.html", User1=user1+".png")
+        return render_template("results.html", user1=user1, user2=user2, opp1=opp1, opp2=opp2)
 
 
 @ app.route("/tips", methods=["GET", "POST"])
