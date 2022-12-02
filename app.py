@@ -221,6 +221,10 @@ def odds():
             return apology("Missing Hangs")
         if user1 not in deck or user2 not in deck or opp1 not in deck or opp2 not in deck or board1 not in deck or board2 not in deck or board3 not in deck or board4 not in deck or board5 not in deck:
             return apology("Invalid Cards")
+        chosen_cards = [user1, user2, opp1, opp2,
+                        board1, board2, board3, board4, board5]
+        if len(set(chosen_cards)) != len(chosen_cards):
+            return apology("Repeated Cards")
         return render_template("results.html", user1=user1, user2=user2, opp1=opp1, opp2=opp2)
 
 
