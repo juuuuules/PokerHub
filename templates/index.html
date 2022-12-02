@@ -5,47 +5,92 @@
 {% block main%}
 	<div class="container">
 		<div class = "row">
-		<div class="col-sm">
-			<h1 class="title">
-				Welcome to Poker Hub!
-			</h1>
-			<p class="body">
-				On this webiste we'll teach you everything you need to know to be great at Texas Hold'em Poker. 
-				Poker can be a complicated game, so let's start with the basics on how to play.
-			</p>
-			<h2 class="title2">
-				The Basics
-			</h2>
-			<p class="body">
-				To start off the game, each player is dealt two cards face down.
-				Over four total betting rounds, five more cards will be dealt face up in the middle of the table.
-			</p>
-			<p class="body">
-				The goal of a Texas hold'em game is to use your two cards in combination with the five dealt cards on the talbe to make the best possible five-card hand.
-			</p>
-			<p class="body">
-				As the hand is played, the 5 additional cards will be dealt to the table in three stages:
-				<br>
-				The Flop: the first three cards
-				<br>
-				The Turn: the fourth card
-				<br>
-				The River: The fifth card
-			</p>
-			<p class="body">
-				After all five cards are dealt, if you are still playing in the hand, you compare your five card hand to each other player. The player with the best 5 cards according to the poker hand rankings wins the hand.
-			</p>
-			<h2 class="title2">
-				Playing a hand
-			</h2>
-			<p class="body">
-				Continue rules...
-			</p>
+			<div class="col-sm">
+				<h1 class="title">
+					Welcome to Poker Hub!
+				</h1>
+				<p class="body">
+					On this website we'll teach you everything you need to know to be great at Texas Hold'em Poker. 
+					Poker can be a complicated game, so let's start with the basics on how to play.
+				</p>
+			</div>
+			<div class="col-sm">
+				<img class="round_image" src="/static/images/pocket_aces.jpg" alt="Pocket Aces">
+				
+			</div>
 		</div>
-		<div class="col-sm">
-			<img class="round_image" src="/static/images/pocket_aces.jpg" alt="Pocket Aces">
-			<img class="round_image" src="/static/images/hand_tier_list.jpg" alt="Hand Tier list">
+		<div class="row">
+			<div class="col-sm">
+				<h2 class="title2">
+					The Basics
+				</h2>
+				<p class="body">
+					To start off the game, each player is dealt two cards face down.
+					Over four total betting rounds, five more cards will be dealt face up in the middle of the table.
+				</p>
+				<p class="body">
+					The goal of a Texas hold'em game is to use your two cards in combination with the five dealt cards on the table to make the best possible five-card hand.
+				</p>
+				<p class="body">
+					As the hand is played, the 5 additional cards will be dealt to the table in three stages:
+					<br>
+					The Flop: the first three cards
+					<br>
+					The Turn: the fourth card
+					<br>
+					The River: The fifth card
+				</p>
+				<p class="body">
+					After all five cards are dealt, if you are still playing in the hand, you compare your five card hand to each other player. The player with the best 5 cards according to the poker hand rankings wins the hand.
+				</p>
+			</div>
+			<div class="col-sm">
+				<img class="round_image" src="/static/images/hand_tier_list.jpg" alt="Hand Tier list">
+			</div>
 		</div>
-	</div>
+		<div class="row">
+			<div class="col-sm">
+				<h2 class="title2">
+					Playing a hand
+				</h2>
+				<p class="body">
+					To start the hand, the person to the left of the dealer puts in a small sum of chips, and the person to his left puts in twice that amount, and these small sums are called the small and big blinds respectively.
+					Once the the two cards are dealt to each player, betting starts witht the person to the left of the big blind. This person can call, bet, or fold.
+					Calling is when when you match the highest bet (currently the big blind), betting is when you bet more than the previous highest bet, and folding is when you give up on the hand and give your card to the dealer.
+					These three options are given to all of the players, until it is the big blinds turn. 
+					Once the betting makes it around, the flop (the first three cards) are dealt and the round of betting continues, this time starting with the small blind.
+					Since everyones bets are matching, instead of calling, the small blind can check. Checkings is just indicating that you don't want to check or fold, and instead want to stay at the amount you have in.
+					The rest of the betting conitnues normally, followed by the turn card being dealt, another round of betting, and then the river before the final round of betting.
+				</p>
+			</div>
+			<div class="col-sm">
+				<img class="round_image" src="/static/images/blinds.webp" alt="Blinds">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm">
+				<p class="body">
+					Once the betting makes it around, the flop (the first three cards) are dealt and the round of betting continues, this time starting with the small blind.
+					Since everyones bets are matching, instead of calling, the small blind can check. Checkings is just indicating that you don't want to check or fold, and instead want to stay at the amount you have in.
+					The rest of the betting conitnues normally, followed by the turn card being dealt, another round of betting, and then the river before the final round of betting.
+				</p>
+			</div>
+			<div class="col-sm">
+				<img class="round_image" src="/static/images/game.webp" alt="Poker Game">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm">
+				<p class="body">
+					To reiterate, to win the hand, all other players must fold, or you must have the best hand among the players who are still playing at the end of the final betting round.
+					The winner of the hand takes the pot (all of the chips that were bet), and if there is a tie the players that tie split the pot equally.
+					**If one player decides to bet everything they have, this is calling going "All-in". 
+					That player can only win the amount he put in from each player, and the remaining bets go to the second place winner.
+				</p>
+			</div>
+			<div class="col-sm">
+				<img class="round_image" src="/static/images/all_in.jpeg" alt="All-in">
+			</div>
+		</div>
 	</div>
 {% endblock %}
