@@ -266,11 +266,6 @@ nav {
     font-size: calc(7px + 1vw);
 }
 
-.float_up {
-    padding-top: .05%;
-    float: top;
-}
-
 /* -------------------------------------- */
 /* Log Page */
 
@@ -541,18 +536,6 @@ table.table td .cancel {
     width: 500px;
 }
 
-.block {
-    display: block;
-    width: 100%;
-}
-
-.central-container {
-    width: 50%;
-    height: 70%;
-    border: 10px var(--black);
-    border-radius: 2px;
-    text-align: middle;
-}
 
 /* Make responsive to change in screen size */
 @media (max-width: 678px) {
