@@ -545,6 +545,7 @@ table.table td .cancel {
     width: 50%;
     height: 70%;
     border: 10px var(--black);
+    text-align: middle;
 }
 
 /* Make responsive to change in screen size */
