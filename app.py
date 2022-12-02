@@ -10,7 +10,7 @@ from flask import Flask, render_template, redirect, request, session, jsonify
 from flask_session import Session
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from helpers import login_required, is_valid_email, is_valid_password, usd
+from helpers import login_required, is_valid_email, is_valid_password, usd, apology
 
 # OPEN SOURCE TOOLS
 # 1 - unsplash (open-source images)
@@ -214,8 +214,7 @@ def odds():
         board4 = request.form.get("board4")
         board5 = request.form.get("board5")
         if not user1 or not user2 or not opp1 or not opp2:
-            pass
-        return render_template("apology.html")
+            return apology("missing hands")
 
 
 @ app.route("/tips", methods=["GET", "POST"])
