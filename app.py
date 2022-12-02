@@ -201,7 +201,20 @@ def ajax_update():
 @ app.route("/odds", methods=["GET", "POST"])
 @ login_required
 def odds():
-    return render_template("odds.html")
+    if request.method == "GET":
+        return render_template("odds.html")
+    else:
+        user1 = request.form.get("user1")
+        user2 = request.form.get("user2")
+        opp1 = request.form.get("opp1")
+        opp2 = request.form.get("opp2")
+        board1 = request.form.get("board1")
+        board2 = request.form.get("board2")
+        board3 = request.form.get("board3")
+        board4 = request.form.get("board4")
+        board5 = request.form.get("board5")
+        if not user1 or not user2 or not opp1 or not opp2:
+            return render_template("apology.html")
 
 
 @ app.route("/tips", methods=["GET", "POST"])
