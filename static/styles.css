@@ -536,6 +536,10 @@ table.table td .cancel {
     width: 500px;
 }
 
+.center {
+    margin: auto;
+}
+
 
 /* Make responsive to change in screen size */
 @media (max-width: 678px) {
