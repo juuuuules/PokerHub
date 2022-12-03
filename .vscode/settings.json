@@ -6,14 +6,11 @@
         "source.fixAll": true,
         "source.sortImports": true
     },
-
     "prettier.useTabs": true,
     "prettier.singleQuote": false,
     "prettier.endOfLine": "auto",
     "[html]": {
         "editor.formatOnSave": false
-      },
-
+    },
     "window.zoomLevel": 0
-
 }

@@ -1,9 +1,10 @@
 :root {
     --yellow: #ffa31a;
-    --gray-light: #808080;
+    --gray-light: #c8c8c8;
     --gray-dark: #292929;
     --black: #1b1b1b;
     --white: #ffffff;
+    --beige: beige;
 }
 
 /* Universal Selector */
@@ -21,7 +22,18 @@ body {
     height: 100vh;
 }
 
-/* Login Form */
+footer {
+    background-color: var(--beige);
+    padding-left: 2%;
+    padding-right: 2%
+}
+
+nav {
+    background-color: var(--beige);
+}
+
+/*----------------------------------------------------------------*/
+/* Login and Register Page */
 
 .form-wrapper {
     max-width: 670px;
@@ -170,7 +182,7 @@ body {
     text-align: middle;
 }
 
-.btn {
+.button {
     width: 100%;
     display: flex;
     cursor: pointer;
@@ -214,11 +226,320 @@ body {
     color: var(--yellow)
 }
 
+/* ---------------------------------------------------------------- */
+/* Welcome and Tips Page */
+
+.title {
+    font-family: "Times New Roman", Times, serif;
+    font-size: calc(12px + 2vw);
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 2.5%;
+    padding-bottom: 0.5%;
+}
+
+.title2 {
+    font-family: "Times New Roman", Times, serif;
+    font-size: calc(10px + 1.5vw);
+    padding-top: 1%;
+}
+
+.body {
+    font-family: "Lucida Console", "Courier New", monospace;
+    font-size: calc(8px + 1vw);
+    padding-top: 1%;
+    padding-bottom: 1%;
+    margin-left: auto;
+    margin-right: auto;
+    float: left;
+}
+
+
+.round_image {
+    border-radius: 7%;
+    padding: 1%;
+    width: 90%;
+}
+
+.title3 {
+    font-family: "Lucida Console", "Courier New", monospace;
+    font-size: calc(7px + 1vw);
+}
+
+/* -------------------------------------- */
+/* Log Page */
+
+/* Session dropdowns */
+.list {
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    flex-direction: column;
+}
+
+.accordion {
+    /* size of accordion */
+    max-width: 400px;
+    /* optional */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    overflow: hidden;
+    font-family: "Lucida Console", "Courier New", monospace;
+    background: var(--beige);
+}
+
+.accordion-label,
+.accordion-content {
+    /* padding: 14 top bottom, 20 left right */
+    padding: 14px 20px;
+}
+
+.accordion-label {
+    display: block;
+    color: var(--black);
+    font-weight: 500;
+    cursor: pointer;
+    position: relative;
+    transition: background 0.1s;
+}
+
+.accordion-label:hover {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.accordion-label::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 20px;
+    width: 12px;
+    height: 6px;
+    background-image: url('data:image/svg+xml;utf8,<svg width="100" height="50" xmlns="http://www.w3.org/2000/svg"><polygon points="0,0 100,0 50,50" style="fill:%2300000099;" /></svg>');
+    background-size: contain;
+    transition: transform 0.4s;
+}
+
+
+.accordion-content {
+    background: var(--beige);
+    line-height: 1.6;
+    font-size: 0.85em;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.accordion-input {
+    display: none;
+}
+
+.accordion-input:checked~.accordion-content {
+    display: block;
+}
+
+/* make icon rotate */
+.accordion-input:checked~.accordion-label::after {
+    transform: translateY(-50%) rotate(0.5turn);
+}
 
 
 
+/* Table */
+
+table.table {
+    table-layout: fixed;
+}
+
+table.table tr th,
+table.table tr td {
+    border-color: #e9e9e9;
+}
+
+table.table th i {
+    font-size: 13px;
+    margin: 0 5px;
+    cursor: pointer;
+}
+
+table.table th:last-child {
+    width: 100px;
+}
+
+table.table td a {
+    cursor: pointer;
+    display: inline-block;
+    margin: 0 5px;
+    min-width: 24px;
+}
+
+table.table td a.add {
+    color: #27C46B;
+}
+
+table.table td a.cancel {
+    color: #E34724;
+}
+
+table.table td a.edit {
+    color: #FFC107;
+}
+
+table.table td a.delete {
+    color: #E34724;
+}
+
+table.table td i {
+    font-size: 19px;
+}
+
+table.table td a.add i {
+    font-size: 24px;
+    margin-right: -1px;
+    position: relative;
+    top: 3px;
+}
+
+table.table .form-control {
+    height: 32px;
+    line-height: 32px;
+    box-shadow: none;
+    border-radius: 2px;
+}
+
+table.table .form-control.error {
+    border-color: #f50000;
+}
+
+table.table td .add {
+    display: none;
+}
+
+table.table td .cancel {
+    display: none;
+}
+
+.row {
+    padding-bottom: 10px;
+    margin: 0 0 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+.add-new {
+    float: right;
+    height: 30px;
+    font-weight: bold;
+    font-size: 12px;
+    border-radius: 50px;
+    line-height: 13px;
+}
 
 
+
+/* Session Dropdown */
+.dropdown {
+    box-sizing: border-box;
+}
+
+.tub {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.select {
+    background: var(--black);
+    color: var(--yellow);
+    justify-content: space-between;
+    align-items: center;
+    border: 2px solid var(--gray-dark);
+    border-radius: 4px;
+    padding: 8px;
+    width: 500px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.select-clicked {
+    border: 2px var(--yellow) solid;
+    box-shadow: 0 0 0.8em var(--yellow);
+}
+
+.select:hover {
+    background: var(--gray-dark);
+}
+
+.caret {
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 6px solid var(--white);
+    transition: 0.3s;
+    left: 97%;
+    top: 45%;
+    position: absolute;
+}
+
+.caret-rotate {
+    transform: rotate(180deg);
+}
+
+.menu {
+    list-style: none;
+    padding: 0.2em 0.5em;
+    background: var(--gray-dark);
+    box-shadow: 0 0.5em 1em rgba(0, 0, 0, 0.2);
+    color: var(--yellow);
+    position: absolute;
+    top: 3em;
+    left: 50%;
+    width: 100%;
+    transform: translateX(-50%);
+    opacity: 0;
+    display: none;
+    transition: 0.2s;
+    z-index: 1;
+}
+
+.menu li {
+    padding: 0.7em 0.5em;
+    margin: 0.3em 0;
+    border-radius: 0.5em;
+    cursor: pointer;
+}
+
+.menu li:hover {
+    background: var(--gray-dark);
+}
+
+.active {
+    background: #23242a;
+}
+
+.menu-open {
+    display: block;
+    opacity: 1;
+}
+
+/* new session button */
+.btn-add-session {
+    margin-right: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    text-align: middle;
+    width: 500px;
+}
+
+.block {
+    display: block;
+    width: 100%;
+}
 
 /* Make responsive to change in screen size */
 @media (max-width: 678px) {
