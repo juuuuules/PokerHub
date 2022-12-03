@@ -12,6 +12,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 from helpers import login_required, is_valid_email, is_valid_password, usd, apology
 
+from eval import simulate
 # OPEN SOURCE TOOLS
 # 1 - unsplash (open-source images)
 # 2 - coverr (open-source video)
@@ -219,13 +220,36 @@ def odds():
         board5 = request.form.get("board5")
         if not user1 or not user2 or not opp1 or not opp2:
             return apology("Missing Hangs")
-        if user1 not in deck or user2 not in deck or opp1 not in deck or opp2 not in deck or board1 not in deck or board2 not in deck or board3 not in deck or board4 not in deck or board5 not in deck:
+
+        # update this if statement to allow board cards to be empty
+        if user1 not in deck or user2 not in deck or opp1 not in deck or opp2 not in deck:
             return apology("Invalid Cards")
+
+        # Filtering board cards which are allowed to be left blank
+        count = 0
+        boardCards = [board1, board2, board3, board4, board5]
+        for card in boardCards:
+            if card != "" and card not in deck:
+                return apology("Invalid Cards")
+            elif card in deck:
+                count += 1
+        # checking if there is a board
+        board = False
+        if count >= 3:
+            board = True
+
         chosen_cards = [user1, user2, opp1, opp2,
                         board1, board2, board3, board4, board5]
+        # Getting rid of null cards to avoid accidentally triggering repeated card error
+        chosen_cards = [card for card in chosen_cards if card != ""]
+
         if len(set(chosen_cards)) != len(chosen_cards):
             return apology("Repeated Cards")
-        return render_template("results.html", user1=user1, user2=user2, opp1=opp1, opp2=opp2)
+
+        # submitting inputs to function
+        results = simulate(user1, user2, opp1, opp2, board,
+                           board1, board2, board3, board4, board5)
+        return render_template("results.html", user1=user1, user2=user2, opp1=opp1, opp2=opp2, results=results)
 
 
 @ app.route("/tips", methods=["GET", "POST"])
