@@ -546,6 +546,12 @@ table.table td .cancel {
     height: auto;
 }
 
+#moreText {
+
+    /* Display nothing for the element */
+    display: none;
+}
+
 /* Make responsive to change in screen size */
 @media (max-width: 678px) {
     body {
