@@ -541,6 +541,11 @@ table.table td .cancel {
     width: 100%;
 }
 
+.card_size {
+    width: 50%;
+    height: auto;
+}
+
 /* Make responsive to change in screen size */
 @media (max-width: 678px) {
     body {

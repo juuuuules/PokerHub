@@ -221,7 +221,6 @@ def odds():
         if not user1 or not user2 or not opp1 or not opp2:
             return apology("Missing Hangs")
 
-        # update this if statement to allow board cards to be empty
         if user1 not in deck or user2 not in deck or opp1 not in deck or opp2 not in deck:
             return apology("Invalid Cards")
 
@@ -235,7 +234,9 @@ def odds():
                 count += 1
         # checking if there is a board
         board = False
-        if count >= 3:
+        if count == 1 or count == 2:
+            return apology("Invalid Number of Board Cards")
+        elif count >= 3:
             board = True
 
         chosen_cards = [user1, user2, opp1, opp2,

@@ -14,4 +14,5 @@ def simulate(user1, user2, opp1, opp2, board, board1, board2, board3, board4, bo
     results[0] = results[0].split("\n")[1:]
     results[1] = results[1].split("\n")[1:]
     results[2] = results[2].split("\n")[1:]
+    results[0] = [result.split(": ")[1:][0] for result in results[0]]
     return results
