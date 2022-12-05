@@ -21,6 +21,7 @@
                 $(this).attr("disabled", "disabled");
                 var index = $("table tbody tr:last-child").index();
                 var row = '<tr>' +
+                    '<td></td>' +
                     '<td><input type=text class="form-control" name="hand" id="txthand"></td>' +
                     '<td><input type=text class="form-control" name="result" id="txtresult"></td>' +
                     '<td><input type=text class="form-control" name="pot-size" id="txtpot"></td>' +
@@ -50,11 +51,8 @@
                 var txthand = $("#txthand").val();
                 var txtresult = $("#txtresult").val();
                 var txtpot = $("#txtpot").val();
-
-                // grab session id
-                var txtsession = 1;
-                // CHANGE LATER
-                $.post("/ajax_add", {txthand: txthand, txtresult: txtresult, txtpot: txtpot, txtsession: txtsession}, function(data){
+                
+                $.post("/ajax_add", {txthand: txthand, txtresult: txtresult, txtpot: txtpot}, function(data){
                    $("#displaymessage").html(data);
                    $("#displaymessage").show();
                 });
@@ -72,7 +70,7 @@
 
             // edit row on click
             $(document).on("click", ".edit", function(){
-                $(this).parents("tr").find("td:not(:last-child):not(#invisible-hand-id)").each(function(i) {
+                $(this).parents("tr").find("td:not(:last-child)").each(function(i) {
                     if (i=='0') {
                         var idname = "txthand";
                     }
@@ -93,12 +91,13 @@
 
             // finalize row in db
             $(document).on("click", ".update", function(){
-                var string = $(this).parents("tr").find("#invisible-hand-id");
-                var handid = string;
+                
+                var id = $(this).attr("id");
+                var string = id;
                 var txthand = $("#txthand").val();
                 var txtresult = $("#txtresult").val();
                 var txtpot = $("#txtpot").val();
-                $.post("/ajax_update", {handid: handid, txthand: txthand, txtresult: txtresult, txtpot: txtpot}, function(data){
+                $.post("/ajax_update", {string: string, txthand: txthand, txtresult: txtresult, txtpot: txtpot}, function(data){
                     $("#displaymessage").html(data);
                     $("#displaymessage").show();
                 });
@@ -110,7 +109,7 @@
                 $(".add").removeAttr("disabled");
                 var id = $(this).attr("id");
                 var string = id;
-                $.post("/ajax_delete", {id: id}, function(data){
+                $.post("/ajax_delete", {string: string}, function(data){
                     $("#displaymessage").html(data);
                     $("#displaymessage").show();
                 });
@@ -122,18 +121,37 @@
         <h1 class="title2">Session Log. Click the dropdowns to view your hand history!</h1>
     </div>
     <section class="list">
-        <form action="/log" method="POST">
-            <div class="btn-add-session">
-                <button class="button submit-btn"><span>New Session</span></button>
-            </div>
-        </form>
+        
         <div class="container">
             <div class="accordion">
                 <div>
                     <input type="checkbox" name="sessions" id="session1" class="accordion-input">
-                    <label for="session2" class="accordion-label">Summary Statistics</label>
+                    <label for="session1" class="accordion-label">Summary Statistics</label>
                     <div class="accordion-content">
-                        TEST TEST TEST
+                        <form action="/log" method="POST">
+                            <p>Total earnings................{{ total_winnings }}</p>
+                            <div>Please enter a hand to look up. First letter is card, second letter is suit.</div>
+                            <div class="user-input">
+                                <input type="text" id="cards" name="cards" placeholder="Input Hand">
+                            </div>
+                            <div class="btn-add-session">
+                                <button class="button submit-btn"><span>Lookup Hand</span></button>
+                            </div>
+                            <table class="table table-striped table-bordered" style="width: 100%">
+                                <thead>
+                                    <tr>
+                                        <th>Win percentage</th>
+                                        <th>Earnings</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>{{ win_percentage }}</td>
+                                        <td>{{ hand_earnings }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </form>
                     </div>
                 </div>
                 <div>
@@ -156,10 +174,11 @@
                                 <tbody>
                                     {% for hand in hands %}
                                     <tr>
+                                        <td> {{ hand[0] }}</td>
+                                        <td> {{ hand[2] }} </td>
                                         <td> {{ hand[3] }} </td>
-                                        <td> {{ hand[4] }} </td>
-                                        <td> {{ hand[5] }} </td>
-                                        <td id="invisible-hand-id"> {{ hand[0]}} </td>
+                                        <td> {{ convert_to_usd(hand[4]) }} </td>
+                                        <td></td>
                                         <td>
                                             <a class="add" data-toggle="tooltip" title="Add" id=""><i class="fa fa-user-plus"></i></a>
                                             <a class="cancel" data-toggle="tooltip" title="Cancel" id=""><i class="fa fa-trash-o"></i></a>
