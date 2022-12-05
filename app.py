@@ -163,10 +163,10 @@ def log():
         losses = db.execute(
             "SELECT COUNT(*) FROM hands WHERE (user_id = ? AND hand = ? AND result = ?)", (user_id, cards, "LOSS")).fetchall()
         percentage = 100 * (wins / (wins + losses))
-        
+
         winnings = db.execute(
-        "SELECT SUM(pot_size) FROM hands WHERE (user_id = ? and hand = ?)", (user_id, cards)).fetchall()
-        
+            "SELECT SUM(pot_size) FROM hands WHERE (user_id = ? and hand = ?)", (user_id, cards)).fetchall()
+
         return render_template("log.html", hands=hands, total_winnings=winnings, win_percentage=percentage, hand_earnings=hand_earnings, convert_to_usd=usd)
     return render_template("log.html", hands=hands, total_winnings=winnings, convert_to_usd=usd)
 
@@ -178,7 +178,6 @@ def ajax_add():
     db = conn.cursor()
     if request.method == "POST":
         user_id = session["user_id"]
-        session_id = request.form["txtsession"]
         hand = request.form["txthand"]
         result = request.form["txtresult"].upper()
         potsize = request.form["txtpot"]
@@ -190,7 +189,7 @@ def ajax_add():
             msg = "Please input the size of the pot."
         else:
             db.execute("INSERT INTO hands (user_id, session_id, user_hand, result, pot_size) VALUES (?,?,?,?,?)", [
-                user_id, session_id, hand, result, potsize])
+                user_id, hand, result, potsize])
             conn.commit()
             msg = "New Hand Created Successfully."
     return jsonify(msg)
@@ -213,7 +212,7 @@ def ajax_update():
         print(f"potsize: {pot_size}")
         # update database
         db.execute("UPDATE hands SET user_hand = ?, result = ?, pot_size = ? WHERE id = ?", [
-                   hand, result, usd(pot_size), hand_id])
+                   hand, result, pot_size, hand_id])
         conn.commit()
         db.close()
 
