@@ -148,8 +148,6 @@ def log():
     db = conn.cursor()
     # display session and hand history
     user_id = session["user_id"]
-    sessions = db.execute(
-        "SELECT * FROM sessions WHERE user_id = ?", (user_id,)).fetchall()
     hands = db.execute(
         "SELECT * FROM hands WHERE user_id = ?", (user_id,)).fetchall()
     print(hands)
@@ -164,7 +162,7 @@ def log():
         db.execute("INSERT INTO session (user_id, email, winnings, time) VALUES (?,?,?,?,?)", [
             user_id, email, usd(winnings), time])
 
-    return render_template("log.html", sessions=sessions, hands=hands)
+    return render_template("log.html", hands=hands)
 
 
 @app.route("/ajax_add", methods=["POST", "GET"])
