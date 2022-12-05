@@ -158,16 +158,19 @@ def log():
     if request.method == "POST":
         # get win percentage given hand
         cards = request.form.get("cards")
-        wins = db.execute(
-            "SELECT COUNT(*) FROM hands WHERE (user_id = ? AND hand = ? AND result = ?)", (user_id, cards, "WIN")).fetchall()
-        losses = db.execute(
-            "SELECT COUNT(*) FROM hands WHERE (user_id = ? AND hand = ? AND result = ?)", (user_id, cards, "LOSS")).fetchall()
-        percentage = 100 * (wins / (wins + losses))
+        if cards == "":
+            error_message = "Please enter a hand."
+        else:
+            wins = db.execute(
+                "SELECT COUNT(*) FROM hands WHERE (user_id = ? AND user_hand = ? AND result = ?)", (user_id, cards, "WIN")).fetchall()
+            losses = db.execute(
+                "SELECT COUNT(*) FROM hands WHERE (user_id = ? AND user_hand = ? AND result = ?)", (user_id, cards, "LOSS")).fetchall()
+            percentage = 100 * (wins / (wins + losses))
 
-        hand_earnings = db.execute(
-            "SELECT SUM(pot_size) FROM hands WHERE (user_id = ? and hand = ?)", (user_id, cards)).fetchall()
+            hand_earnings = db.execute(
+                "SELECT SUM(pot_size) FROM hands WHERE (user_id = ? and hand = ?)", (user_id, cards)).fetchall()
 
-        return render_template("log.html", hands=hands, total_winnings=winnings, win_percentage=percentage, hand_earnings=hand_earnings, convert_to_usd=usd)
+        return render_template("log.html", error_message=error_message, hands=hands, total_winnings=winnings, win_percentage=percentage, hand_earnings=hand_earnings, convert_to_usd=usd)
     return render_template("log.html", hands=hands, total_winnings=winnings, convert_to_usd=usd)
 
 
@@ -210,13 +213,18 @@ def ajax_update():
         print(f"hand:  {hand}")
         print(f"result: {result}")
         print(f"potsize: {pot_size}")
-        # update database
-        db.execute("UPDATE hands SET user_hand = ?, result = ?, pot_size = ? WHERE id = ?", [
-                   hand, result, pot_size, hand_id])
-        conn.commit()
-        db.close()
-
-        msg = "Hand Updated Successfully."
+        if hand == "":
+            msg = "Please input a hand."
+        elif result == "":
+            msg = "Please input a result."
+        elif pot_size == "":
+            msg = "Please input the size of the pot."
+        else:
+            db.execute("UPDATE hands SET user_hand = ?, result = ?, pot_size = ? WHERE id = ?", [
+                hand, result, pot_size, hand_id])
+            conn.commit()
+            db.close()
+            msg = "Hand Updated Successfully."
     return jsonify(msg)
 
 
@@ -229,6 +237,8 @@ def ajax_delete():
         getid = request.form["string"]
         print(getid)
         db.execute("DELETE FROM hands WHERE id = {0}".format(getid))
+        conn.commit()
+        db.execute("UPDATE SQLITE_SEQUENCE SET SEQ=0 WHERE NAME='hands'")
         conn.commit()
         db.close()
         msg = "Hand Deleted Successfully."

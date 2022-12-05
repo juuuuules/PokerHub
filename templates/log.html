@@ -23,7 +23,7 @@
                 var row = '<tr>' +
                     '<td></td>' +
                     '<td><input type=text class="form-control" name="hand" id="txthand"></td>' +
-                    '<td><select name="result" id="txtresult"><option value="WIN">WIN</option><option value="LOSS">LOSS</option></select></td>' +
+                    '<td><div class="dropdown"><select name="result" id="txtresult"><option value="" disabled selected>Select</option><option value="WIN">WIN</option><option value="LOSS">LOSS</option></select></div></td>' +
                     '<td><input type=text class="form-control" name="pot-size" id="txtpot"></td>' +
                     '<td></td>' +
                     '<td>' + actions + '</td>' +
@@ -78,7 +78,7 @@
                     }
                     if (i=='1') {
                         var idname = "txtresult";
-                        $(this).html('<select name="result" id="txtresult"><option value="WIN">WIN</option><option value="LOSS">LOSS</option></select>');
+                        $(this).html('<div class="dropdown"><select name="result" id="txtresult"><option value="" disabled selected>Select</option><option value="WIN">WIN</option><option value="LOSS">LOSS</option></select></div>');
                     }
                     if (i=='2') {
                         var idname = "txtpot";
@@ -110,7 +110,7 @@
             $(document).on("click", ".delete", function(){
                 $(this).parents("tr").remove();
                 $(".add").removeAttr("disabled");
-                var id = $(this).attr("id");
+                var id = $(this).parents("tr").find("#handid").text();
                 var string = id;
                 $.post("/ajax_delete", {string: string}, function(data){
                     $("#displaymessage").html(data);
@@ -131,13 +131,13 @@
                     <label for="session1" class="accordion-label">Summary Statistics</label>
                     <div class="accordion-content">
                         <form action="/log" method="POST">
-                            <p>Total earnings................{{ total_winnings }}</p>
+                            <p>Total earnings................{{ convert_to_usd(total_winnings[0][0]) }}</p>
                             <div>Please enter a hand to look up. First letter is card, second letter is suit.</div>
                             <div class="user-input">
                                 <input type="text" id="cards" name="cards" placeholder="Input Hand">
                             </div>
                             <div class="btn-add-session">
-                                <button class="button submit-btn"><span>Lookup Hand</span></button>
+                                <button class="btn btn-lookup-hand"><span>Lookup Hand</span></button>
                             </div>
                             <p>Win Percentage................{{ win_percentage }}</p>
                             <p>Earnings with this hand................{{ hand_earnings }}</p>
@@ -158,7 +158,7 @@
                                         <th>ID </th>
                                         <th>Hand</th>
                                         <th>Result</th>
-                                        <th>Pot Size</th>
+                                        <th>Amount Won/Lost</th>
                                         <th></th>
                                         <th>Options</th>
                                     </tr>

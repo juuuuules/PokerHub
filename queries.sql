@@ -34,7 +34,7 @@
 
 -- DELETE FROM hands WHERE user_hand = "J5s";
 
-INSERT INTO hands (user_id, user_hand, result, pot_size) VALUES (2, "AsKd", "WIN", 10.00);
+-- INSERT INTO hands (user_id, user_hand, result, pot_size) VALUES (2, "AsKd", "WIN", 10.00);
 -- INSERT INTO hands (user_id, session_id, user_hand, result, pot_size) VALUES (2, 1, "J10d", "WIN", "$10");
 -- INSERT INTO hands (user_id, session_id, user_hand, result, pot_size) VALUES (2, 1, "77", "WIN", "$10");
 
@@ -60,3 +60,7 @@ INSERT INTO hands (user_id, user_hand, result, pot_size) VALUES (2, "AsKd", "WIN
 --     FOREIGN KEY (user_id) REFERENCES users(id)
 -- );
 
+SELECT * FROM sqlite_sequence;
+-- INSERT INTO hands (user_id, user_hand, result, pot_size) VALUES (2, "AKs", "WIN", 10.00);
+INSERT INTO hands (user_id, user_hand, result, pot_size) VALUES (2, "99", "WIN", 10.00);
+SELECT * FROM hands;
