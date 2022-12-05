@@ -49,6 +49,11 @@ def usd(value):
     return f"${float(value):,.2f}"
 
 
+def percentage(value):
+    """Format value as a percentage."""
+    return f"{float(value):,.2f}%"
+
+
 def apology(message, code=400):
     """Render message as an apology to user."""
     def escape(s):
