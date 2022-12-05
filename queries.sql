@@ -40,4 +40,12 @@
 
 -- DELETE FROM hands WHERE pot_size = "$10$";
 
-SELECT * FROM hands
+CREATE TABLE hands (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    user_hand TEXT NOT NULL,
+    result TEXT NOT NULL,
+    pot_size DECIMAL NOT NULL,
+    date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
