@@ -153,7 +153,8 @@ def log():
     print(hands)
 
     winnings = db.execute(
-        "SELECT SUM(pot_size) FROM hands WHERE user_id = ?", (user_id,)).fetchall()
+        "SELECT SUM(pot_size) FROM hands WHERE (user_id = ? AND result = ?)", (user_id, "WIN")).fetchall()[0][0] - db.execute(
+        "SELECT SUM(pot_size) FROM hands WHERE (user_id = ? AND result = ?)", (user_id, "LOSS")).fetchall()[0][0]
 
     if request.method == "POST":
         # get win percentage given hand
