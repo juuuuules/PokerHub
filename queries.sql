@@ -34,18 +34,29 @@
 
 -- DELETE FROM hands WHERE user_hand = "J5s";
 
--- INSERT INTO hands (user_id, session_id, user_hand, result, pot_size) VALUES (2, 1, "AKo", "WIN", "$10");
+INSERT INTO hands (user_id, user_hand, result, pot_size) VALUES (2, "AsKd", "WIN", 10.00);
 -- INSERT INTO hands (user_id, session_id, user_hand, result, pot_size) VALUES (2, 1, "J10d", "WIN", "$10");
 -- INSERT INTO hands (user_id, session_id, user_hand, result, pot_size) VALUES (2, 1, "77", "WIN", "$10");
 
 -- DELETE FROM hands WHERE pot_size = "$10$";
 
-CREATE TABLE hands (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER NOT NULL,
-    user_hand TEXT NOT NULL,
-    result TEXT NOT NULL,
-    pot_size DECIMAL NOT NULL,
-    date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id)
-);
+-- CREATE TABLE hands (
+--     id INTEGER PRIMARY KEY AUTOINCREMENT,
+--     user_id INTEGER NOT NULL,
+--     user_hand TEXT NOT NULL,
+--     result TEXT NOT NULL,
+--     pot_size DECIMAL NOT NULL,
+--     date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+--     FOREIGN KEY (user_id) REFERENCES users(id)
+-- );
+
+
+-- CREATE TABLE hands (
+--     id INTEGER PRIMARY KEY AUTOINCREMENT,
+--     user_id INTEGER NOT NULL,
+--     user_hand TEXT NOT NULL,
+--     result TEXT NOT NULL,
+--     pot_size DECIMAL NOT NULL,
+--     FOREIGN KEY (user_id) REFERENCES users(id)
+-- );
+
