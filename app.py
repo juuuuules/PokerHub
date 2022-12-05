@@ -152,17 +152,23 @@ def log():
         "SELECT * FROM hands WHERE user_id = ?", (user_id,)).fetchall()
     print(hands)
 
-    if request.method == "POST":
-        # get user email
-        email = db.execute(
-            "SELECT email FROM users WHERE user_id = ?", (user_id,)).fetchall()
-        winnings = db.execute(
-            "SELECT sum(pot_size) FROM hands WHERE result = 'W'").fetchall()
-        time = datetime.datetime.now()
-        db.execute("INSERT INTO session (user_id, email, winnings, time) VALUES (?,?,?,?,?)", [
-            user_id, email, usd(winnings), time])
+    winnings = db.execute(
+        "SELECT SUM(pot_size) FROM hands WHERE user_id = ?", (user_id,)).fetchall()
 
-    return render_template("log.html", hands=hands)
+    if request.method == "POST":
+        # get win percentage given hand
+        cards = request.form.get("cards")
+        wins = db.execute(
+            "SELECT COUNT(*) FROM hands WHERE (user_id = ? AND hand = ? AND result = ?)", (user_id, cards, "WIN")).fetchall()
+        losses = db.execute(
+            "SELECT COUNT(*) FROM hands WHERE (user_id = ? AND hand = ? AND result = ?)", (user_id, cards, "LOSS")).fetchall()
+        percentage = 100 * (wins / (wins + losses))
+        
+        winnings = db.execute(
+        "SELECT SUM(pot_size) FROM hands WHERE (user_id = ? and hand = ?)", (user_id, cards)).fetchall()
+        
+        return render_template("log.html", hands=hands, total_winnings=winnings, win_percentage=percentage, hand_earnings=hand_earnings, convert_to_usd=usd)
+    return render_template("log.html", hands=hands, total_winnings=winnings, convert_to_usd=usd)
 
 
 @app.route("/ajax_add", methods=["POST", "GET"])
@@ -184,7 +190,7 @@ def ajax_add():
             msg = "Please input the size of the pot."
         else:
             db.execute("INSERT INTO hands (user_id, session_id, user_hand, result, pot_size) VALUES (?,?,?,?,?)", [
-                user_id, session_id, hand, result, usd(potsize)])
+                user_id, session_id, hand, result, potsize])
             conn.commit()
             msg = "New Hand Created Successfully."
     return jsonify(msg)
@@ -202,7 +208,7 @@ def ajax_update():
         pot_size = request.form["txtpot"]
         print("---Updated hand---")
         print(f"hand id:  {hand_id}")
-        print(f"hand:  {had}")
+        print(f"hand:  {hand}")
         print(f"result: {result}")
         print(f"potsize: {pot_size}")
         # update database
