@@ -164,7 +164,7 @@ def log():
             "SELECT COUNT(*) FROM hands WHERE (user_id = ? AND hand = ? AND result = ?)", (user_id, cards, "LOSS")).fetchall()
         percentage = 100 * (wins / (wins + losses))
 
-        winnings = db.execute(
+        hand_earnings = db.execute(
             "SELECT SUM(pot_size) FROM hands WHERE (user_id = ? and hand = ?)", (user_id, cards)).fetchall()
 
         return render_template("log.html", hands=hands, total_winnings=winnings, win_percentage=percentage, hand_earnings=hand_earnings, convert_to_usd=usd)
@@ -188,7 +188,7 @@ def ajax_add():
         elif potsize == "":
             msg = "Please input the size of the pot."
         else:
-            db.execute("INSERT INTO hands (user_id, session_id, user_hand, result, pot_size) VALUES (?,?,?,?,?)", [
+            db.execute("INSERT INTO hands (user_id, user_hand, result, pot_size) VALUES (?,?,?,?)", [
                 user_id, hand, result, potsize])
             conn.commit()
             msg = "New Hand Created Successfully."
@@ -201,7 +201,7 @@ def ajax_update():
     conn = sqlite3.connect("poker.db")
     db = conn.cursor()
     if request.method == "POST":
-        hand_id = request.form["handid"]
+        hand_id = request.form["string"]
         hand = request.form["txthand"]
         result = request.form["txtresult"]
         pot_size = request.form["txtpot"]
