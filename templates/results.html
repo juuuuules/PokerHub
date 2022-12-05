@@ -26,7 +26,7 @@
                 <img class="round_image card_size" src="/static/images/{{ opp2 }}.png" alt="Your Opponent's Second Card">
             </div>
         </div>
-        <h3>Your Chances of Winning Based on Each Hand Type</h3>
+        <h3>Your Likelihood for Each Possible Hand Type</h3>
             <table class="table">
                 <thead>
                     <tr>
@@ -37,13 +37,13 @@
                 <tbody>
                     {% for result in results[1]%}
                         <tr>
-                            <th scope="row">{{ result }}</th>
+                            <th scope="row">{{ result[0] }}</th>
                             <td>{{ result[1]|float * 100}}%</td>
                         <tr>
                     {%endfor%}
                 </tbody>
             </table>
-        <h3>Your Opponent's Chances of Winning Based on Each Hand Type</h3>
+        <h3>Your Opponent's Likelihood of Each Possible Hand Type</h3>
             <table class="table">
                 <thead>
                     <tr>
@@ -54,8 +54,8 @@
                 <tbody>
                     {% for result in results[2]%}
                         <tr>
-                            <th scope="row">{{ result }}</th>
-                            <td>{{ result[1] }}</td>
+                            <th scope="row">{{ result[0] }}</th>
+                            <td>{{ result[1]|float *100 }}%</td>
                         <tr>
                     {%endfor%}
                 </tbody>

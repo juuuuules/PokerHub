@@ -16,5 +16,5 @@ def simulate(user1, user2, opp1, opp2, board, board1, board2, board3, board4, bo
     results[2] = results[2].split("\n")[1:]
     results[0] = [result.split(": ")[1:][0] for result in results[0]]
     results[1] = [result.split(":") for result in results[1]]
-    results[2] = [result.split(":")[0] for result in results[2]]
+    results[2] = [result.split(":") for result in results[2]]
     return results
