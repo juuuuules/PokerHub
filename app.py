@@ -16,7 +16,7 @@ from helpers import login_required, is_valid_email, is_valid_password, usd, apol
 from eval import simulate
 # OPEN SOURCE TOOLS
 # 1 - unsplash (open-source images)
-# 2 - coverr (open-source video)
+# 2 - coverr (open-source video)/
 # 3 - google fonts (free fonts)
 # 4 - flaticon (any icon you want)
 
