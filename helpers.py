@@ -25,6 +25,7 @@ def is_valid_email(email):
 
 # password validation
 def is_valid_password(password):
+    # Return True if password has over 5 characters, contains a number, lower case character, upper case character, and special character
     if len(password) > 5:
         lower_case = False
         upper_case = False
@@ -40,6 +41,7 @@ def is_valid_password(password):
             if not char.isalnum():
                 special = True
         return lower_case and upper_case and num and special
+    # Otherwise return false
     else:
         return False
 
