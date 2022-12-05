@@ -11,7 +11,7 @@ from flask_session import Session
 from werkzeug.security import generate_password_hash, check_password_hash
 import datetime
 
-from helpers import login_required, is_valid_email, is_valid_password, usd, apology
+from helpers import login_required, is_valid_email, is_valid_password, usd, apology, percentage
 
 from eval import simulate
 # OPEN SOURCE TOOLS
@@ -292,7 +292,7 @@ def odds():
         # submitting inputs to function
         results = simulate(user1, user2, opp1, opp2, board,
                            board1, board2, board3, board4, board5)
-        return render_template("results.html", user1=user1, user2=user2, opp1=opp1, opp2=opp2, results=results)
+        return render_template("results.html", user1=user1, user2=user2, opp1=opp1, opp2=opp2, results=results, percentage=percentage)
 
 
 @ app.route("/tips", methods=["GET", "POST"])

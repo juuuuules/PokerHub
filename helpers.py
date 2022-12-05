@@ -53,7 +53,7 @@ def usd(value):
 
 def percentage(value):
     """Format value as a percentage."""
-    return f"{float(value):,.2f}%"
+    return f"{(float(value)*100):,.2f}%"
 
 
 def apology(message, code=400):

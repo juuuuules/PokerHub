@@ -15,9 +15,9 @@
                 <img class="round_image card_size" src="/static/images/{{ user2 }}.png" alt="Your Second Card">
             </div>
         </div>
-        <h2>Your chances of winning: {{ results[0][0]|float * 100}}%</h2>
-        <h2>Your opponent's chances of winning: {{ results[0][1]|float * 100}}%</h2>
-        <h2>Chances of a tie: {{ results[0][2]|float * 100}}%</h2>
+        <h2>Your chances of winning: {{ percentage(results[0][0])}}</h2>
+        <h2>Your opponent's chances of winning: {{ percentage(results[0][1])}}</h2>
+        <h2>Chances of a tie: {{ percentage(results[0][2])}}</h2>
         <div class = "row">
             <div class="col-sm">
                 <img class="round_image card_size" src="/static/images/{{ opp1 }}.png" alt="Your Opponent's First Card">
@@ -38,7 +38,7 @@
                     {% for result in results[1]%}
                         <tr>
                             <th scope="row">{{ result[0] }}</th>
-                            <td>{{ result[1]|float * 100}}%</td>
+                            <td>{{ percentage(result[1])}}</td>
                         <tr>
                     {%endfor%}
                 </tbody>
@@ -55,7 +55,7 @@
                     {% for result in results[2]%}
                         <tr>
                             <th scope="row">{{ result[0] }}</th>
-                            <td>{{ result[1]|float * 100 }}%</td>
+                            <td>{{ percentage(result[1]) }}</td>
                         <tr>
                     {%endfor%}
                 </tbody>
