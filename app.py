@@ -261,7 +261,7 @@ def odds():
         board4 = request.form.get("board4")
         board5 = request.form.get("board5")
         if not user1 or not user2 or not opp1 or not opp2:
-            return apology("Missing Hangs")
+            return apology("Missing Cards")
 
         if user1 not in deck or user2 not in deck or opp1 not in deck or opp2 not in deck:
             return apology("Invalid Cards")
