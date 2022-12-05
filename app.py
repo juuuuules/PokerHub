@@ -189,8 +189,8 @@ def ajax_update():
         print(string)
 
         # update database
-        db.execute("UPDATE hands SET hand = %s, result = %s, pot_size = %s", [
-                   hand, result, usd(pot_size)])
+        db.execute("UPDATE hands SET user_hand = ?, result = ?, pot_size = ? WHERE id=?", [
+                   hand, result, usd(pot_size), string])
         conn.commit()
         db.close()
 

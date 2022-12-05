@@ -72,16 +72,16 @@
             $(document).on("click", ".edit", function(){
                 $(this).parents("tr").find("td:not(:last-child)").each(function(i) {
                     if (i=='0') {
-                        var idhand = "txthand";
+                        var idname = "txthand";
                     }
                     if (i=='1') {
-                        var idresult = "txtresult";
+                        var idname = "txtresult";
                     }
                     if (i=='2') {
-                        var idpot = "txtpot";
+                        var idname = "txtpot";
                     }
                     else {}
-                    $(this).html('<input type="text" name="updaterec" id="' + idhand + '"class="form-control" value"' + $(this).text() + '">');
+                    $(this).html('<input type="text" name="updaterec" id="' + idname + '"class="form-control" value"' + $(this).text() + '">');
                 });
                 $(this).parents("tr").find(".add, .edit").toggle();
                 $(".add-new").attr("disabled", "disabled");
