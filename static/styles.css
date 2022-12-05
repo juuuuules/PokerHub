@@ -536,6 +536,21 @@ table.table td .cancel {
     width: 500px;
 }
 
+.block {
+    display: block;
+    width: 100%;
+}
+
+.card_size {
+    width: 50%;
+    height: auto;
+}
+
+#moreText {
+
+    /* Display nothing for the element */
+    display: none;
+}
 
 /* Make responsive to change in screen size */
 @media (max-width: 678px) {

@@ -10,8 +10,9 @@ from flask import Flask, render_template, redirect, request, session, jsonify
 from flask_session import Session
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from helpers import login_required, is_valid_email, is_valid_password, usd
+from helpers import login_required, is_valid_email, is_valid_password, usd, apology
 
+from eval import simulate
 # OPEN SOURCE TOOLS
 # 1 - unsplash (open-source images)
 # 2 - coverr (open-source video)
@@ -30,6 +31,10 @@ app.config["SESSION_TYPE"] = "filesystem"
 
 Session(app)
 
+
+# list of possible cards
+deck = ["2h", "3h", "4h", "5h", "6h", "7h", "8h", "9h", "10h", "Jh", "Qh", "Kh", "Ah", "2d", "3d", "4d", "5d", "6d", "7d", "8d", "9d", "10d", "Jd", "Qd", "Kd",
+        "Ad", "2s", "3s", "4s", "5s", "6s", "7s", "8s", "9s", "10s", "Js", "Qs", "Ks", "As", "2c", "3c", "4c", "5c", "6c", "7c", "8c", "9c", "10c", "Jc", "Qc", "Kc", "Ac"]
 
 """
 Routes
@@ -201,7 +206,51 @@ def ajax_update():
 @ app.route("/odds", methods=["GET", "POST"])
 @ login_required
 def odds():
-    return render_template("odds.html")
+    if request.method == "GET":
+        return render_template("odds.html")
+    else:
+        user1 = request.form.get("user1")
+        user2 = request.form.get("user2")
+        opp1 = request.form.get("opp1")
+        opp2 = request.form.get("opp2")
+        board1 = request.form.get("board1")
+        board2 = request.form.get("board2")
+        board3 = request.form.get("board3")
+        board4 = request.form.get("board4")
+        board5 = request.form.get("board5")
+        if not user1 or not user2 or not opp1 or not opp2:
+            return apology("Missing Hangs")
+
+        if user1 not in deck or user2 not in deck or opp1 not in deck or opp2 not in deck:
+            return apology("Invalid Cards")
+
+        # Filtering board cards which are allowed to be left blank
+        count = 0
+        boardCards = [board1, board2, board3, board4, board5]
+        for card in boardCards:
+            if card != "" and card not in deck:
+                return apology("Invalid Cards")
+            elif card in deck:
+                count += 1
+        # checking if there is a board
+        board = False
+        if count == 1 or count == 2:
+            return apology("Invalid Number of Board Cards")
+        elif count >= 3:
+            board = True
+
+        chosen_cards = [user1, user2, opp1, opp2,
+                        board1, board2, board3, board4, board5]
+        # Getting rid of null cards to avoid accidentally triggering repeated card error
+        chosen_cards = [card for card in chosen_cards if card != ""]
+
+        if len(set(chosen_cards)) != len(chosen_cards):
+            return apology("Repeated Cards")
+
+        # submitting inputs to function
+        results = simulate(user1, user2, opp1, opp2, board,
+                           board1, board2, board3, board4, board5)
+        return render_template("results.html", user1=user1, user2=user2, opp1=opp1, opp2=opp2, results=results)
 
 
 @ app.route("/tips", methods=["GET", "POST"])
