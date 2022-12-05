@@ -152,26 +152,45 @@ def log():
         "SELECT * FROM hands WHERE user_id = ?", (user_id,)).fetchall()
     print(hands)
 
-    winnings = db.execute(
-        "SELECT SUM(pot_size) FROM hands WHERE user_id = ?", (user_id,)).fetchall()
+    money_won_total = db.execute(
+        "SELECT SUM(pot_size) FROM hands WHERE (user_id = ? AND result = ?)", (user_id, "WIN")).fetchall()[0][0]
+    money_lost_total = db.execute(
+        "SELECT SUM(pot_size) FROM hands WHERE (user_id = ? AND result = ?)", (user_id, "LOSS")).fetchall()[0][0]
+    if money_won_total is None:
+        money_won_total = 0
+    if money_lost_total is None:
+        money_lost_total = 0
+    winnings = money_won_total - money_lost_total
 
     if request.method == "POST":
         # get win percentage given hand
         cards = request.form.get("cards")
         if cards == "":
             error_message = "Please enter a hand."
+            return render_template("log.html", hands=hands, total_winnings=winnings, convert_to_usd=usd, percentage=percentage)
         else:
             wins = db.execute(
-                "SELECT COUNT(*) FROM hands WHERE (user_id = ? AND user_hand = ? AND result = ?)", (user_id, cards, "WIN")).fetchall()
+                "SELECT COUNT(*) FROM hands WHERE (user_id = ? AND user_hand = ? AND result = ?)", (user_id, cards, "WIN")).fetchall()[0][0]
             losses = db.execute(
-                "SELECT COUNT(*) FROM hands WHERE (user_id = ? AND user_hand = ? AND result = ?)", (user_id, cards, "LOSS")).fetchall()
-            percentage = 100 * (wins / (wins + losses))
+                "SELECT COUNT(*) FROM hands WHERE (user_id = ? AND user_hand = ? AND result = ?)", (user_id, cards, "LOSS")).fetchall()[0][0]
+            print(f"Losses: {losses}")
+            print(f"wins: {wins}")
 
-            hand_earnings = db.execute(
-                "SELECT SUM(pot_size) FROM hands WHERE (user_id = ? and hand = ?)", (user_id, cards)).fetchall()
+            p = 100 * (wins / (wins + losses))
 
-        return render_template("log.html", error_message=error_message, hands=hands, total_winnings=winnings, win_percentage=percentage, hand_earnings=hand_earnings, convert_to_usd=usd)
-    return render_template("log.html", hands=hands, total_winnings=winnings, convert_to_usd=usd)
+            money_won_hand = db.execute(
+                "SELECT SUM(pot_size) FROM hands WHERE (user_id = ? AND user_hand = ? AND result = ?)", (user_id, cards, "WIN")).fetchall()[0][0]
+            money_lost_hand = db.execute(
+                "SELECT SUM(pot_size) FROM hands WHERE (user_id = ? AND user_hand = ? AND result = ?)", (user_id, cards, "LOSS")).fetchall()[0][0]
+            if money_won_hand is None:
+                money_won_hand = 0
+            if money_lost_hand is None:
+                money_lost_hand = 0
+            hand_earnings = money_won_hand - money_lost_hand
+
+            error_message = "Succcess!"
+        return render_template("log.html", error_message=error_message, hands=hands, total_winnings=winnings, win_percentage=p, hand_earnings=hand_earnings, convert_to_usd=usd, percentage=percentage)
+    return render_template("log.html", hands=hands, total_winnings=winnings, convert_to_usd=usd, percentage=percentage)
 
 
 @app.route("/ajax_add", methods=["POST", "GET"])
