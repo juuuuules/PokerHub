@@ -172,7 +172,8 @@ def log():
             p = 100 * (wins / (wins + losses))
 
             hand_earnings = db.execute(
-                "SELECT SUM(pot_size) FROM hands WHERE (user_id = ? and user_hand = ?)", (user_id, cards)).fetchall()
+                "SELECT SUM(pot_size) FROM hands WHERE (user_id = ? AND user_hand = ? AND result = ?)", (user_id, cards, "WIN")).fetchall()[0][0] - db.execute(
+                "SELECT SUM(pot_size) FROM hands WHERE (user_id = ? AND user_hand = ? AND result = ?)", (user_id, cards, "LOSS")).fetchall()[0][0]
             error_message = "Succcess!"
         return render_template("log.html", error_message=error_message, hands=hands, total_winnings=winnings, win_percentage=p, hand_earnings=hand_earnings, convert_to_usd=usd, percentage=percentage)
     return render_template("log.html", hands=hands, total_winnings=winnings, convert_to_usd=usd, percentage=percentage)
