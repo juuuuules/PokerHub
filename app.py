@@ -9,6 +9,7 @@ import sqlite3
 from flask import Flask, render_template, redirect, request, session, jsonify
 from flask_session import Session
 from werkzeug.security import generate_password_hash, check_password_hash
+import datetime
 
 from helpers import login_required, is_valid_email, is_valid_password, usd, apology
 
@@ -145,15 +146,23 @@ def log():
     # configure database
     conn = sqlite3.connect("poker.db")
     db = conn.cursor()
-
     # display session and hand history
     user_id = session["user_id"]
-    sessions = db.execute(
-        "SELECT * FROM sessions WHERE user_id = ?", (user_id,)).fetchall()
     hands = db.execute(
         "SELECT * FROM hands WHERE user_id = ?", (user_id,)).fetchall()
     print(hands)
-    return render_template("log.html", sessions=sessions, hands=hands)
+
+    if request.method == "POST":
+        # get user email
+        email = db.execute(
+            "SELECT email FROM users WHERE user_id = ?", (user_id,)).fetchall()
+        winnings = db.execute(
+            "SELECT sum(pot_size) FROM hands WHERE result = 'W'").fetchall()
+        time = datetime.datetime.now()
+        db.execute("INSERT INTO session (user_id, email, winnings, time) VALUES (?,?,?,?,?)", [
+            user_id, email, usd(winnings), time])
+
+    return render_template("log.html", hands=hands)
 
 
 @app.route("/ajax_add", methods=["POST", "GET"])
@@ -174,7 +183,7 @@ def ajax_add():
         elif potsize == "":
             msg = "Please input the size of the pot."
         else:
-            db.execute("INSERT INTO hands (user_id, session_id, user_hand, result, pot_size) VALUES (?,?,?,?, ?)", [
+            db.execute("INSERT INTO hands (user_id, session_id, user_hand, result, pot_size) VALUES (?,?,?,?,?)", [
                 user_id, session_id, hand, result, usd(potsize)])
             conn.commit()
             msg = "New Hand Created Successfully."
@@ -187,19 +196,37 @@ def ajax_update():
     conn = sqlite3.connect("poker.db")
     db = conn.cursor()
     if request.method == "POST":
-        string = request.form["string"]
+        hand_id = request.form["handid"]
         hand = request.form["txthand"]
         result = request.form["txtresult"]
         pot_size = request.form["txtpot"]
-        print(string)
-
+        print("---Updated hand---")
+        print(f"hand id:  {hand_id}")
+        print(f"hand:  {had}")
+        print(f"result: {result}")
+        print(f"potsize: {pot_size}")
         # update database
-        db.execute("UPDATE hands SET hand = %s, result = %s, pot_size = %s", [
-                   hand, result, usd(pot_size)])
+        db.execute("UPDATE hands SET user_hand = ?, result = ?, pot_size = ? WHERE id = ?", [
+                   hand, result, usd(pot_size), hand_id])
         conn.commit()
         db.close()
 
         msg = "Hand Updated Successfully."
+    return jsonify(msg)
+
+
+@app.route("/ajax_delete", methods=["POST", "GET"])
+def ajax_delete():
+    # configure database
+    conn = sqlite3.connect("poker.db")
+    db = conn.cursor()
+    if request.method == "POST":
+        getid = request.form["string"]
+        print(getid)
+        db.execute("DELETE FROM hands WHERE id = {0}".format(getid))
+        conn.commit()
+        db.close()
+        msg = "Hand Deleted Successfully."
     return jsonify(msg)
 
 
