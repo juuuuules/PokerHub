@@ -95,7 +95,7 @@
             // finalize row in db
             $(document).on("click", ".update", function(){
                 
-                var id = $("#handid").text();
+                var id = $(this).parents("tr").find("#handid").text();
                 var string = id;
                 var txthand = $("#txthand").val();
                 var txtresult = $("#txtresult").val();
