@@ -80,7 +80,7 @@
 --SELECT COUNT(user_hand) FROM hands WHERE user_id = 2;
 --SELECT SUM(pot_size) FROM hands WHERE user_id = 2 AND result = "WIN";
 =======
-SELECT COUNT(user_hand) FROM hands WHERE user_id = 2;
+SELECT COUNT(*) FROM hands WHERE user_id = 2;
 --SELECT SUM(pot_size) FROM hands WHERE user_id = 2 AND result = "WIN";
 
 >>>>>>> 7b2d43e5c5921dcb4c7633435d9703f3e67c6db9

@@ -208,6 +208,9 @@ def log():
         if in_both == False and lost_hands[1] < biggest_loss:
             biggest_loss = lost_hands[1]
             worst_hand = lost_hands[0]
+    hands_played = db.execute(
+        "SELECT COUNT(*) FROM hands WHERE (user_id = ? AND result = ?)", (user_id, "LOSS")).fetchall()[0][0] + db.execute(
+        "SELECT COUNT(*) FROM hands WHERE (user_id = ? AND result = ?)", (user_id, "WIN")).fetchall()[0][0]
 
     if request.method == "POST":
         # get win percentage given hand
@@ -245,7 +248,7 @@ def log():
 
             error_message = "Succcess!"
         return render_template("log.html", error_message=error_message, hands=hands, total_winnings=winnings, win_percentage=p, hand_earnings=hand_earnings, convert_to_usd=usd, percentage=percentage)
-    return render_template("log.html", hands=hands, total_winnings=winnings, best_hand=best_hand, worst_hand=worst_hand, convert_to_usd=usd, percentage=percentage)
+    return render_template("log.html", hands=hands, total_winnings=winnings, best_hand=best_hand, worst_hand=worst_hand, hands_played=hands_played, convert_to_usd=usd, percentage=percentage)
 
 
 @app.route("/ajax_add", methods=["POST", "GET"])
