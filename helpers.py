@@ -47,17 +47,17 @@ def is_valid_password(password):
 
 
 def usd(value):
-    """Format value as USD."""
+    # Format value as USD
     return f"${float(value):,.2f}"
 
 
 def percentage(value):
-    """Format value as a percentage."""
+    # Format value as a percentage
     return f"{(float(value)*100):,.2f}%"
 
 
 def apology(message, code=400):
-    """Render message as an apology to user."""
+    # Render message as an apology to user
     def escape(s):
         """
         Escape special characters.
