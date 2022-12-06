@@ -76,5 +76,11 @@
 --SELECT user_hand, pot_size FROM hands WHERE user_id = 2;
 
 --SELECT user_hand, SUM(pot_size) FROM hands WHERE result = "LOSS" AND user_id = "2" GROUP BY user_hand;
+<<<<<<< HEAD
 --SELECT COUNT(user_hand) FROM hands WHERE user_id = 2;
 --SELECT SUM(pot_size) FROM hands WHERE user_id = 2 AND result = "WIN";
+=======
+SELECT COUNT(user_hand) FROM hands WHERE user_id = 2;
+--SELECT SUM(pot_size) FROM hands WHERE user_id = 2 AND result = "WIN";
+
+>>>>>>> 7b2d43e5c5921dcb4c7633435d9703f3e67c6db9
