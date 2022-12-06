@@ -9,7 +9,6 @@ import sqlite3
 from flask import Flask, render_template, redirect, request, session, jsonify
 from flask_session import Session
 from werkzeug.security import generate_password_hash, check_password_hash
-import datetime
 
 from helpers import login_required, is_valid_email, is_valid_password, usd, apology, percentage
 
