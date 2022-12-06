@@ -1,5 +1,7 @@
 import os
 
+# run user inputs through open source code to access odds
+
 
 def simulate(user1, user2, opp1, opp2, board, board1, board2, board3, board4, board5):
     print(user1)
