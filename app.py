@@ -165,7 +165,6 @@ def log():
     if money_lost_total is None:
         money_lost_total = 0
     winnings = money_won_total - money_lost_total
-    #hands_played = db.execute("SELECT COUNT(pot_size) FROM hands WHERE (user_id = ?)", (user_id)).fetchall()[0][0]
     hands_won = db.execute(
         "SELECT user_hand, SUM(pot_size) FROM hands WHERE result = ? AND user_id = ? GROUP BY user_hand", ("WIN", user_id)).fetchall()
     hands_lost = db.execute(
@@ -245,8 +244,7 @@ def log():
 
             error_message = "Succcess!"
         return render_template("log.html", error_message=error_message, hands=hands, total_winnings=winnings, win_percentage=p, hand_earnings=hand_earnings, convert_to_usd=usd, percentage=percentage)
-    return render_template("log.html", hands=hands, total_winnings=winnings,  # hands_played=hands_played,
-                           best_hand=best_hand, worst_hand=worst_hand, convert_to_usd=usd, percentage=percentage)
+    return render_template("log.html", hands=hands, total_winnings=winnings, best_hand=best_hand, worst_hand=worst_hand, convert_to_usd=usd, percentage=percentage)
 
 
 @app.route("/ajax_add", methods=["POST", "GET"])
