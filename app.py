@@ -208,6 +208,7 @@ def log():
         if in_both == False and lost_hands[1] < biggest_loss:
             biggest_loss = lost_hands[1]
             worst_hand = lost_hands[0]
+    # calculates number of hands played
     hands_played = db.execute(
         "SELECT COUNT(*) FROM hands WHERE (user_id = ? AND result = ?)", (user_id, "LOSS")).fetchall()[0][0] + db.execute(
         "SELECT COUNT(*) FROM hands WHERE (user_id = ? AND result = ?)", (user_id, "WIN")).fetchall()[0][0]
