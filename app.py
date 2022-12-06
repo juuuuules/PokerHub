@@ -32,7 +32,7 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 
-# list of possible cards
+# list of all cards in deck
 deck = ["2h", "3h", "4h", "5h", "6h", "7h", "8h", "9h", "Th", "Jh", "Qh", "Kh", "Ah", "2d", "3d", "4d", "5d", "6d", "7d", "8d", "9d", "Td", "Jd", "Qd", "Kd",
         "Ad", "2s", "3s", "4s", "5s", "6s", "7s", "8s", "9s", "Ts", "Js", "Qs", "Ks", "As", "2c", "3c", "4c", "5c", "6c", "7c", "8c", "9c", "Tc", "Jc", "Qc", "Kc", "Ac"]
 
@@ -54,7 +54,7 @@ def register():
         password = request.form.get("password")
         confirmation = request.form.get("confirmation")
         error_message = ""
-
+        # registration requirements
         if email == "" or password == "" or confirmation == "":
             error_message = "Please fill out the required fields"
             return render_template("register.html", error_message=error_message)
@@ -155,7 +155,7 @@ def log():
     user_id = session["user_id"]
     hands = db.execute(
         "SELECT * FROM hands WHERE user_id = ?", (user_id,)).fetchall()
-
+    # SQL queries and python to calculate total winnings
     money_won_total = db.execute(
         "SELECT SUM(pot_size) FROM hands WHERE (user_id = ? AND result = ?)", (user_id, "WIN")).fetchall()[0][0]
     money_lost_total = db.execute(
@@ -165,6 +165,7 @@ def log():
     if money_lost_total is None:
         money_lost_total = 0
     winnings = money_won_total - money_lost_total
+    # SQL queries amd python to calculate best and worst hands
     hands_won = db.execute(
         "SELECT user_hand, SUM(pot_size) FROM hands WHERE result = ? AND user_id = ? GROUP BY user_hand", ("WIN", user_id)).fetchall()
     hands_lost = db.execute(
@@ -193,7 +194,7 @@ def log():
     biggest_loss = 0
     worst_hand = None
     for lost_hands in hands_lost:
-        won_index_count += 1
+        lost_index_count += 1
         in_both = False
         for won_hands in hands_won:
             if lost_hands[0] == won_hands[0]:
@@ -201,12 +202,16 @@ def log():
                 current_hand = list(worst_hands[lost_index_count])
                 current_hand[1] = float(lost_hands[1]) - float(won_hands[1])
                 worst_hands[lost_index_count] = tuple(current_hand)
-                if current_hand[1] < biggest_loss:
+                if current_hand[1] > biggest_loss:
                     biggest_loss = current_hand[1]
                     worst_hand = current_hand[0]
-        if in_both == False and lost_hands[1] < biggest_loss:
+        if in_both == False and lost_hands[1] > biggest_loss:
             biggest_loss = lost_hands[1]
             worst_hand = lost_hands[0]
+    # calculates number of hands played
+    hands_played = db.execute(
+        "SELECT COUNT(*) FROM hands WHERE (user_id = ? AND result = ?)", (user_id, "LOSS")).fetchall()[0][0] + db.execute(
+        "SELECT COUNT(*) FROM hands WHERE (user_id = ? AND result = ?)", (user_id, "WIN")).fetchall()[0][0]
 
     if request.method == "POST":
         # get win percentage given hand
@@ -243,8 +248,8 @@ def log():
             hand_earnings = money_won_hand - money_lost_hand
 
             error_message = "Succcess!"
-        return render_template("log.html", error_message=error_message, hands=hands, total_winnings=winnings, win_percentage=p, hand_earnings=hand_earnings, convert_to_usd=usd, percentage=percentage)
-    return render_template("log.html", hands=hands, total_winnings=winnings, best_hand=best_hand, worst_hand=worst_hand, convert_to_usd=usd, percentage=percentage)
+        return render_template("log.html", error_message=error_message, hands=hands, total_winnings=winnings, win_percentage=p, best_hand=best_hand, worst_hand=worst_hand, hands_played=hands_played, hand_earnings=hand_earnings, convert_to_usd=usd, percentage=percentage)
+    return render_template("log.html", hands=hands, total_winnings=winnings, best_hand=best_hand, worst_hand=worst_hand, hands_played=hands_played, convert_to_usd=usd, percentage=percentage)
 
 
 @app.route("/ajax_add", methods=["POST", "GET"])
@@ -257,6 +262,7 @@ def ajax_add():
         hand = request.form["txthand"]
         result = request.form["txtresult"].upper()
         potsize = request.form["txtpot"]
+        # check if all inputs are appropriate
         if hand == "":
             msg = "Please input a hand."
         elif result == "":
@@ -266,6 +272,7 @@ def ajax_add():
             print(potsize)
         elif not potsize.isnumeric():
             msg = "Please input a numerical value for the size of the pot"
+        # if inputs are appropriate, then add to db
         else:
             db.execute("INSERT INTO hands (user_id, user_hand, result, pot_size) VALUES (?,?,?,?)", [
                 user_id, hand, result, potsize])
@@ -284,11 +291,7 @@ def ajax_update():
         hand = request.form["txthand"]
         result = request.form["txtresult"]
         pot_size = request.form["txtpot"]
-        print("---Updated hand---")
-        print(f"hand id:  {hand_id}")
-        print(f"hand:  {hand}")
-        print(f"result: {result}")
-        print(f"potsize: {pot_size}")
+        # check input requirements
         if hand == "":
             msg = "Please input a hand."
         elif result == "":
@@ -297,6 +300,7 @@ def ajax_update():
             msg = "Please input the size of the pot."
         elif not pot_size.isnumeric():
             msg = "Please input a number for the size of the pot"
+        # update database
         else:
             db.execute("UPDATE hands SET user_hand = ?, result = ?, pot_size = ? WHERE id = ?", [
                 hand, result, pot_size, hand_id])
@@ -312,8 +316,8 @@ def ajax_delete():
     conn = sqlite3.connect("poker.db")
     db = conn.cursor()
     if request.method == "POST":
+        # delete elements that are selected to be deleted
         getid = request.form["string"]
-        print(getid)
         db.execute("DELETE FROM hands WHERE id = {0}".format(getid))
         conn.commit()
         db.execute("UPDATE SQLITE_SEQUENCE SET SEQ=0 WHERE NAME='hands'")
@@ -338,6 +342,7 @@ def odds():
         board3 = request.form.get("board3")
         board4 = request.form.get("board4")
         board5 = request.form.get("board5")
+        # check if inputs existed
         if not user1 or not user2 or not opp1 or not opp2:
             return apology("Missing Cards")
 
