@@ -287,11 +287,6 @@ def ajax_update():
         hand = request.form["txthand"]
         result = request.form["txtresult"]
         pot_size = request.form["txtpot"]
-        print("---Updated hand---")
-        print(f"hand id:  {hand_id}")
-        print(f"hand:  {hand}")
-        print(f"result: {result}")
-        print(f"potsize: {pot_size}")
         # check input requirements
         if hand == "":
             msg = "Please input a hand."
@@ -301,6 +296,7 @@ def ajax_update():
             msg = "Please input the size of the pot."
         elif not pot_size.isnumeric():
             msg = "Please input a number for the size of the pot"
+        # update database
         else:
             db.execute("UPDATE hands SET user_hand = ?, result = ?, pot_size = ? WHERE id = ?", [
                 hand, result, pot_size, hand_id])
@@ -316,8 +312,8 @@ def ajax_delete():
     conn = sqlite3.connect("poker.db")
     db = conn.cursor()
     if request.method == "POST":
+        # delete elements that are selected to be deleted
         getid = request.form["string"]
-        print(getid)
         db.execute("DELETE FROM hands WHERE id = {0}".format(getid))
         conn.commit()
         db.execute("UPDATE SQLITE_SEQUENCE SET SEQ=0 WHERE NAME='hands'")
@@ -342,6 +338,7 @@ def odds():
         board3 = request.form.get("board3")
         board4 = request.form.get("board4")
         board5 = request.form.get("board5")
+        # check if inputs existed
         if not user1 or not user2 or not opp1 or not opp2:
             return apology("Missing Cards")
 
