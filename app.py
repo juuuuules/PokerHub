@@ -9,7 +9,6 @@ import sqlite3
 from flask import Flask, render_template, redirect, request, session, jsonify
 from flask_session import Session
 from werkzeug.security import generate_password_hash, check_password_hash
-import datetime
 
 from helpers import login_required, is_valid_email, is_valid_password, usd, apology, percentage
 
@@ -88,6 +87,12 @@ def register():
                    (email, hash))
         conn.commit()
 
+        # add sample hand to database
+        id = db.execute("SELECT id FROM users WHERE email = ?",
+                        (email,)).fetchone()[0]
+        db.execute(
+            "INSERT INTO hands (user_id, user_hand, result, pot_size) VALUES (?, ?, ?, ?)", [id, 'AKs *SAMPLE HAND', 'WIN', 0.00])
+        conn.commit()
         return redirect("/")
 
     return render_template("register.html")
@@ -164,9 +169,17 @@ def log():
 
     if request.method == "POST":
         # get win percentage given hand
+
         cards = request.form.get("cards")
+        # check if cards are blank
         if cards == "":
             error_message = "Please enter a hand."
+            return render_template("log.html", hands=hands, total_winnings=winnings, convert_to_usd=usd, percentage=percentage)
+
+        # check if hand exists
+        elif len(db.execute(
+                "SELECT * FROM hands WHERE user_hand = ?", (cards,)).fetchall()) == 0:
+            error_message = "You have not played ths hand."
             return render_template("log.html", hands=hands, total_winnings=winnings, convert_to_usd=usd, percentage=percentage)
         else:
             wins = db.execute(
