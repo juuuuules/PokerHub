@@ -11,12 +11,12 @@ from flask_session import Session
 from werkzeug.security import generate_password_hash, check_password_hash
 import datetime
 
-from helpers import login_required, is_valid_email, is_valid_password, usd, apology
+from helpers import login_required, is_valid_email, is_valid_password, usd, apology, percentage
 
 from eval import simulate
 # OPEN SOURCE TOOLS
 # 1 - unsplash (open-source images)
-# 2 - coverr (open-source video)
+# 2 - coverr (open-source video)/
 # 3 - google fonts (free fonts)
 # 4 - flaticon (any icon you want)
 
@@ -152,26 +152,45 @@ def log():
         "SELECT * FROM hands WHERE user_id = ?", (user_id,)).fetchall()
     print(hands)
 
-    winnings = db.execute(
-        "SELECT SUM(pot_size) FROM hands WHERE user_id = ?", (user_id,)).fetchall()
+    money_won_total = db.execute(
+        "SELECT SUM(pot_size) FROM hands WHERE (user_id = ? AND result = ?)", (user_id, "WIN")).fetchall()[0][0]
+    money_lost_total = db.execute(
+        "SELECT SUM(pot_size) FROM hands WHERE (user_id = ? AND result = ?)", (user_id, "LOSS")).fetchall()[0][0]
+    if money_won_total is None:
+        money_won_total = 0
+    if money_lost_total is None:
+        money_lost_total = 0
+    winnings = money_won_total - money_lost_total
 
     if request.method == "POST":
         # get win percentage given hand
         cards = request.form.get("cards")
         if cards == "":
             error_message = "Please enter a hand."
+            return render_template("log.html", hands=hands, total_winnings=winnings, convert_to_usd=usd, percentage=percentage)
         else:
             wins = db.execute(
-                "SELECT COUNT(*) FROM hands WHERE (user_id = ? AND user_hand = ? AND result = ?)", (user_id, cards, "WIN")).fetchall()
+                "SELECT COUNT(*) FROM hands WHERE (user_id = ? AND user_hand = ? AND result = ?)", (user_id, cards, "WIN")).fetchall()[0][0]
             losses = db.execute(
-                "SELECT COUNT(*) FROM hands WHERE (user_id = ? AND user_hand = ? AND result = ?)", (user_id, cards, "LOSS")).fetchall()
-            percentage = 100 * (wins / (wins + losses))
+                "SELECT COUNT(*) FROM hands WHERE (user_id = ? AND user_hand = ? AND result = ?)", (user_id, cards, "LOSS")).fetchall()[0][0]
+            print(f"Losses: {losses}")
+            print(f"wins: {wins}")
 
-            hand_earnings = db.execute(
-                "SELECT SUM(pot_size) FROM hands WHERE (user_id = ? and hand = ?)", (user_id, cards)).fetchall()
+            p = 100 * (wins / (wins + losses))
 
-        return render_template("log.html", error_message=error_message, hands=hands, total_winnings=winnings, win_percentage=percentage, hand_earnings=hand_earnings, convert_to_usd=usd)
-    return render_template("log.html", hands=hands, total_winnings=winnings, convert_to_usd=usd)
+            money_won_hand = db.execute(
+                "SELECT SUM(pot_size) FROM hands WHERE (user_id = ? AND user_hand = ? AND result = ?)", (user_id, cards, "WIN")).fetchall()[0][0]
+            money_lost_hand = db.execute(
+                "SELECT SUM(pot_size) FROM hands WHERE (user_id = ? AND user_hand = ? AND result = ?)", (user_id, cards, "LOSS")).fetchall()[0][0]
+            if money_won_hand is None:
+                money_won_hand = 0
+            if money_lost_hand is None:
+                money_lost_hand = 0
+            hand_earnings = money_won_hand - money_lost_hand
+
+            error_message = "Succcess!"
+        return render_template("log.html", error_message=error_message, hands=hands, total_winnings=winnings, win_percentage=p, hand_earnings=hand_earnings, convert_to_usd=usd, percentage=percentage)
+    return render_template("log.html", hands=hands, total_winnings=winnings, convert_to_usd=usd, percentage=percentage)
 
 
 @app.route("/ajax_add", methods=["POST", "GET"])
@@ -292,7 +311,7 @@ def odds():
         # submitting inputs to function
         results = simulate(user1, user2, opp1, opp2, board,
                            board1, board2, board3, board4, board5)
-        return render_template("results.html", user1=user1, user2=user2, opp1=opp1, opp2=opp2, results=results)
+        return render_template("results.html", user1=user1, user2=user2, opp1=opp1, opp2=opp2, results=results, percentage=percentage)
 
 
 @ app.route("/tips", methods=["GET", "POST"])
