@@ -12,7 +12,6 @@ def simulate(user1, user2, opp1, opp2, board, board1, board2, board3, board4, bo
 
     # Getting results from command line and cleaning into the winning percentages and histograms
     results = output_stream.read().split("\n\n")[:-1]
-    print(results)
     results[0] = results[0].split("\n")[1:]
     results[1] = results[1].split("\n")[1:]
     results[2] = results[2].split("\n")[1:]
