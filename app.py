@@ -155,7 +155,6 @@ def log():
     user_id = session["user_id"]
     hands = db.execute(
         "SELECT * FROM hands WHERE user_id = ?", (user_id,)).fetchall()
-    print(hands)
 
     money_won_total = db.execute(
         "SELECT SUM(pot_size) FROM hands WHERE (user_id = ? AND result = ?)", (user_id, "WIN")).fetchall()[0][0]
@@ -166,6 +165,48 @@ def log():
     if money_lost_total is None:
         money_lost_total = 0
     winnings = money_won_total - money_lost_total
+    hands_won = db.execute(
+        "SELECT user_hand, SUM(pot_size) FROM hands WHERE result = ? AND user_id = ? GROUP BY user_hand", ("WIN", user_id)).fetchall()
+    hands_lost = db.execute(
+        "SELECT user_hand, SUM(pot_size) FROM hands WHERE result = ? AND user_id = ? GROUP BY user_hand", ("LOSS", user_id)).fetchall()
+    best_hands = hands_won
+    won_index_count = -1
+    biggest_win = 0
+    best_hand = None
+    for won_hands in hands_won:
+        won_index_count += 1
+        in_both = False
+        for lost_hands in hands_lost:
+            if won_hands[0] == lost_hands[0]:
+                in_both = True
+                current_hand = list(best_hands[won_index_count])
+                current_hand[1] = float(won_hands[1]) - float(lost_hands[1])
+                best_hands[won_index_count] = tuple(current_hand)
+                if current_hand[1] > biggest_win:
+                    biggest_win = current_hand[1]
+                    best_hand = current_hand[0]
+        if in_both == False and won_hands[1] > biggest_win:
+            biggest_win = won_hands[1]
+            best_hand = won_hands[0]
+    worst_hands = hands_lost
+    lost_index_count = -1
+    biggest_loss = 0
+    worst_hand = None
+    for lost_hands in hands_lost:
+        won_index_count += 1
+        in_both = False
+        for won_hands in hands_won:
+            if lost_hands[0] == won_hands[0]:
+                in_both = True
+                current_hand = list(worst_hands[lost_index_count])
+                current_hand[1] = float(lost_hands[1]) - float(won_hands[1])
+                worst_hands[lost_index_count] = tuple(current_hand)
+                if current_hand[1] < biggest_loss:
+                    biggest_loss = current_hand[1]
+                    worst_hand = current_hand[0]
+        if in_both == False and lost_hands[1] < biggest_loss:
+            biggest_loss = lost_hands[1]
+            worst_hand = lost_hands[0]
 
     if request.method == "POST":
         # get win percentage given hand
@@ -203,7 +244,7 @@ def log():
 
             error_message = "Succcess!"
         return render_template("log.html", error_message=error_message, hands=hands, total_winnings=winnings, win_percentage=p, hand_earnings=hand_earnings, convert_to_usd=usd, percentage=percentage)
-    return render_template("log.html", hands=hands, total_winnings=winnings, convert_to_usd=usd, percentage=percentage)
+    return render_template("log.html", hands=hands, total_winnings=winnings, best_hand=best_hand, biggest_win=biggest_win, worst_hand=worst_hand, biggest_loss=biggest_loss, convert_to_usd=usd, percentage=percentage)
 
 
 @app.route("/ajax_add", methods=["POST", "GET"])
@@ -222,6 +263,9 @@ def ajax_add():
             msg = "Please input a result."
         elif potsize == "":
             msg = "Please input the size of the pot."
+            print(potsize)
+        elif not potsize.isnumeric():
+            msg = "Please input a numerical value for the size of the pot"
         else:
             db.execute("INSERT INTO hands (user_id, user_hand, result, pot_size) VALUES (?,?,?,?)", [
                 user_id, hand, result, potsize])
@@ -251,6 +295,8 @@ def ajax_update():
             msg = "Please input a result."
         elif pot_size == "":
             msg = "Please input the size of the pot."
+        elif not pot_size.isnumeric():
+            msg = "Please input a number for the size of the pot"
         else:
             db.execute("UPDATE hands SET user_hand = ?, result = ?, pot_size = ? WHERE id = ?", [
                 hand, result, pot_size, hand_id])

@@ -132,7 +132,9 @@
                     <div class="accordion-content">
                         <form action="/log" method="POST">
                             <p>Total earnings................{{ convert_to_usd(total_winnings) }}</p>
-                            <div>Please enter a hand to look up. First letter is card, second letter is suit.</div>
+                            <p>Best Hand.....................{{ best_hand }}</p>
+                            <p>Worst Hand....................{{ worst_hand }}</p>
+                            <div>Please enter a hand to look up. First enter the two values corresponding to the two cards (1, 2, 3, ..., T, J, Q, K, A), then either an 'o' or an 's' to indicate whether the hand was suited or offsuit.</div>
                             <div class="user-input">
                                 <input type="text" id="cards" name="cards" placeholder="Input Hand">
                             </div>
@@ -173,7 +175,6 @@
                                         <td class="blank"></td>
                                         <td class="blank">                                        
                                             <a class="add" data-toggle="tooltip" title="Add" id=""><i class="fa fa-user-plus"></i></a>
-                                            <a class="cancel" data-toggle="tooltip" title="Cancel" id=""><i class="fa fa-trash-o"></i></a>
                                             <a class="edit" data-toggle="tooltip" title="Edit" id=""><i class="fa fa-pencil"></i></a>
                                             <a class="delete" data-toggle="tooltip" title="Delete" id=""><i class="fa fa-trash-o"></i></a>
                                         </td>
