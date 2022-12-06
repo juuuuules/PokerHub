@@ -248,7 +248,7 @@ def log():
             hand_earnings = money_won_hand - money_lost_hand
 
             error_message = "Succcess!"
-        return render_template("log.html", error_message=error_message, hands=hands, total_winnings=winnings, win_percentage=p, hand_earnings=hand_earnings, convert_to_usd=usd, percentage=percentage)
+        return render_template("log.html", error_message=error_message, hands=hands, total_winnings=winnings, win_percentage=p, best_hand=best_hand, worst_hand=worst_hand, hands_played=hands_played, hand_earnings=hand_earnings, convert_to_usd=usd, percentage=percentage)
     return render_template("log.html", hands=hands, total_winnings=winnings, best_hand=best_hand, worst_hand=worst_hand, hands_played=hands_played, convert_to_usd=usd, percentage=percentage)
 
 
