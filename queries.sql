@@ -38,7 +38,7 @@
 -- INSERT INTO hands (user_id, session_id, user_hand, result, pot_size) VALUES (2, 1, "J10d", "WIN", "$10");
 -- INSERT INTO hands (user_id, session_id, user_hand, result, pot_size) VALUES (2, 1, "77", "WIN", "$10");
 
--- DELETE FROM hands WHERE pot_size = "$10$";
+DELETE FROM hands WHERE pot_size = "$10$";
 
 -- CREATE TABLE hands (
 --     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -60,7 +60,8 @@
 --     FOREIGN KEY (user_id) REFERENCES users(id)
 -- );
 
-SELECT * FROM sqlite_sequence;
--- INSERT INTO hands (user_id, user_hand, result, pot_size) VALUES (2, "AKs", "WIN", 10.00);
-INSERT INTO hands (user_id, user_hand, result, pot_size) VALUES (2, "99", "WIN", 10.00);
-SELECT * FROM hands;
+-- SELECT * FROM sqlite_sequence;
+-- INSERT INTO hands (user_id, user_hand, result, pot_size) VALUES (2, "99", "WIN", 10.00);
+-- SELECT * FROM hands;
+
+DELETE FROM users WHERE email = "zakarias_erdos@college.harvard.edu";
