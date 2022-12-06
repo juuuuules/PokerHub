@@ -38,7 +38,6 @@
 -- INSERT INTO hands (user_id, session_id, user_hand, result, pot_size) VALUES (2, 1, "J10d", "WIN", "$10");
 -- INSERT INTO hands (user_id, session_id, user_hand, result, pot_size) VALUES (2, 1, "77", "WIN", "$10");
 
--- DELETE FROM hands WHERE pot_size = "$10$";
 
 -- CREATE TABLE hands (
 --     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -60,7 +59,28 @@
 --     FOREIGN KEY (user_id) REFERENCES users(id)
 -- );
 
-SELECT * FROM sqlite_sequence;
--- INSERT INTO hands (user_id, user_hand, result, pot_size) VALUES (2, "AKs", "WIN", 10.00);
-INSERT INTO hands (user_id, user_hand, result, pot_size) VALUES (2, "99", "WIN", 10.00);
-SELECT * FROM hands;
+-- SELECT * FROM sqlite_sequence;
+-- INSERT INTO hands (user_id, user_hand, result, pot_size) VALUES (2, "99", "WIN", 10.00);
+-- SELECT * FROM hands;
+
+--DELETE FROM users WHERE email = "zakarias_erdos@college.harvard.edu";
+
+
+--DELETE FROM hands WHERE pot_size = "";
+--SELECT MAX(pot_size) WHERE SUM(pot_size) WHERE result = ? AND GROUP BY user_hand
+
+--SELECT user_hand, pot_size FROM hands WHERE pot_size IS MAX(pot_size) GROUP BY user_hand;
+
+--SELECT SUM(pot_size) FROM hands WHERE result = "WIN" - SELECT SUM(pot_size) FROM hands WHERE result = "SELL" GROUP BY user_hand;
+
+--SELECT user_hand, pot_size FROM hands WHERE user_id = 2;
+
+--SELECT user_hand, SUM(pot_size) FROM hands WHERE result = "LOSS" AND user_id = "2" GROUP BY user_hand;
+<<<<<<< HEAD
+--SELECT COUNT(user_hand) FROM hands WHERE user_id = 2;
+--SELECT SUM(pot_size) FROM hands WHERE user_id = 2 AND result = "WIN";
+=======
+SELECT COUNT(*) FROM hands WHERE user_id = 2;
+--SELECT SUM(pot_size) FROM hands WHERE user_id = 2 AND result = "WIN";
+
+>>>>>>> 7b2d43e5c5921dcb4c7633435d9703f3e67c6db9
