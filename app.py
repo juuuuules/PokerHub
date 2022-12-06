@@ -9,13 +9,14 @@ import sqlite3
 from flask import Flask, render_template, redirect, request, session, jsonify
 from flask_session import Session
 from werkzeug.security import generate_password_hash, check_password_hash
+import datetime
 
-from helpers import login_required, is_valid_email, is_valid_password, usd, apology
+from helpers import login_required, is_valid_email, is_valid_password, usd, apology, percentage
 
 from eval import simulate
 # OPEN SOURCE TOOLS
 # 1 - unsplash (open-source images)
-# 2 - coverr (open-source video)
+# 2 - coverr (open-source video)/
 # 3 - google fonts (free fonts)
 # 4 - flaticon (any icon you want)
 
@@ -33,8 +34,8 @@ Session(app)
 
 
 # list of possible cards
-deck = ["2h", "3h", "4h", "5h", "6h", "7h", "8h", "9h", "10h", "Jh", "Qh", "Kh", "Ah", "2d", "3d", "4d", "5d", "6d", "7d", "8d", "9d", "10d", "Jd", "Qd", "Kd",
-        "Ad", "2s", "3s", "4s", "5s", "6s", "7s", "8s", "9s", "10s", "Js", "Qs", "Ks", "As", "2c", "3c", "4c", "5c", "6c", "7c", "8c", "9c", "10c", "Jc", "Qc", "Kc", "Ac"]
+deck = ["2h", "3h", "4h", "5h", "6h", "7h", "8h", "9h", "Th", "Jh", "Qh", "Kh", "Ah", "2d", "3d", "4d", "5d", "6d", "7d", "8d", "9d", "Td", "Jd", "Qd", "Kd",
+        "Ad", "2s", "3s", "4s", "5s", "6s", "7s", "8s", "9s", "Ts", "Js", "Qs", "Ks", "As", "2c", "3c", "4c", "5c", "6c", "7c", "8c", "9c", "Tc", "Jc", "Qc", "Kc", "Ac"]
 
 """
 Routes
@@ -145,15 +146,51 @@ def log():
     # configure database
     conn = sqlite3.connect("poker.db")
     db = conn.cursor()
-
     # display session and hand history
     user_id = session["user_id"]
-    sessions = db.execute(
-        "SELECT * FROM sessions WHERE user_id = ?", (user_id,)).fetchall()
     hands = db.execute(
         "SELECT * FROM hands WHERE user_id = ?", (user_id,)).fetchall()
     print(hands)
-    return render_template("log.html", sessions=sessions, hands=hands)
+
+    money_won_total = db.execute(
+        "SELECT SUM(pot_size) FROM hands WHERE (user_id = ? AND result = ?)", (user_id, "WIN")).fetchall()[0][0]
+    money_lost_total = db.execute(
+        "SELECT SUM(pot_size) FROM hands WHERE (user_id = ? AND result = ?)", (user_id, "LOSS")).fetchall()[0][0]
+    if money_won_total is None:
+        money_won_total = 0
+    if money_lost_total is None:
+        money_lost_total = 0
+    winnings = money_won_total - money_lost_total
+
+    if request.method == "POST":
+        # get win percentage given hand
+        cards = request.form.get("cards")
+        if cards == "":
+            error_message = "Please enter a hand."
+            return render_template("log.html", hands=hands, total_winnings=winnings, convert_to_usd=usd, percentage=percentage)
+        else:
+            wins = db.execute(
+                "SELECT COUNT(*) FROM hands WHERE (user_id = ? AND user_hand = ? AND result = ?)", (user_id, cards, "WIN")).fetchall()[0][0]
+            losses = db.execute(
+                "SELECT COUNT(*) FROM hands WHERE (user_id = ? AND user_hand = ? AND result = ?)", (user_id, cards, "LOSS")).fetchall()[0][0]
+            print(f"Losses: {losses}")
+            print(f"wins: {wins}")
+
+            p = 100 * (wins / (wins + losses))
+
+            money_won_hand = db.execute(
+                "SELECT SUM(pot_size) FROM hands WHERE (user_id = ? AND user_hand = ? AND result = ?)", (user_id, cards, "WIN")).fetchall()[0][0]
+            money_lost_hand = db.execute(
+                "SELECT SUM(pot_size) FROM hands WHERE (user_id = ? AND user_hand = ? AND result = ?)", (user_id, cards, "LOSS")).fetchall()[0][0]
+            if money_won_hand is None:
+                money_won_hand = 0
+            if money_lost_hand is None:
+                money_lost_hand = 0
+            hand_earnings = money_won_hand - money_lost_hand
+
+            error_message = "Succcess!"
+        return render_template("log.html", error_message=error_message, hands=hands, total_winnings=winnings, win_percentage=p, hand_earnings=hand_earnings, convert_to_usd=usd, percentage=percentage)
+    return render_template("log.html", hands=hands, total_winnings=winnings, convert_to_usd=usd, percentage=percentage)
 
 
 @app.route("/ajax_add", methods=["POST", "GET"])
@@ -163,7 +200,6 @@ def ajax_add():
     db = conn.cursor()
     if request.method == "POST":
         user_id = session["user_id"]
-        session_id = request.form["txtsession"]
         hand = request.form["txthand"]
         result = request.form["txtresult"].upper()
         potsize = request.form["txtpot"]
@@ -174,8 +210,8 @@ def ajax_add():
         elif potsize == "":
             msg = "Please input the size of the pot."
         else:
-            db.execute("INSERT INTO hands (user_id, session_id, user_hand, result, pot_size) VALUES (?,?,?,?, ?)", [
-                user_id, session_id, hand, result, usd(potsize)])
+            db.execute("INSERT INTO hands (user_id, user_hand, result, pot_size) VALUES (?,?,?,?)", [
+                user_id, hand, result, potsize])
             conn.commit()
             msg = "New Hand Created Successfully."
     return jsonify(msg)
@@ -187,19 +223,44 @@ def ajax_update():
     conn = sqlite3.connect("poker.db")
     db = conn.cursor()
     if request.method == "POST":
-        string = request.form["string"]
+        hand_id = request.form["string"]
         hand = request.form["txthand"]
         result = request.form["txtresult"]
         pot_size = request.form["txtpot"]
-        print(string)
+        print("---Updated hand---")
+        print(f"hand id:  {hand_id}")
+        print(f"hand:  {hand}")
+        print(f"result: {result}")
+        print(f"potsize: {pot_size}")
+        if hand == "":
+            msg = "Please input a hand."
+        elif result == "":
+            msg = "Please input a result."
+        elif pot_size == "":
+            msg = "Please input the size of the pot."
+        else:
+            db.execute("UPDATE hands SET user_hand = ?, result = ?, pot_size = ? WHERE id = ?", [
+                hand, result, pot_size, hand_id])
+            conn.commit()
+            db.close()
+            msg = "Hand Updated Successfully."
+    return jsonify(msg)
 
-        # update database
-        db.execute("UPDATE hands SET hand = %s, result = %s, pot_size = %s", [
-                   hand, result, usd(pot_size)])
+
+@app.route("/ajax_delete", methods=["POST", "GET"])
+def ajax_delete():
+    # configure database
+    conn = sqlite3.connect("poker.db")
+    db = conn.cursor()
+    if request.method == "POST":
+        getid = request.form["string"]
+        print(getid)
+        db.execute("DELETE FROM hands WHERE id = {0}".format(getid))
+        conn.commit()
+        db.execute("UPDATE SQLITE_SEQUENCE SET SEQ=0 WHERE NAME='hands'")
         conn.commit()
         db.close()
-
-        msg = "Hand Updated Successfully."
+        msg = "Hand Deleted Successfully."
     return jsonify(msg)
 
 
@@ -219,9 +280,8 @@ def odds():
         board4 = request.form.get("board4")
         board5 = request.form.get("board5")
         if not user1 or not user2 or not opp1 or not opp2:
-            return apology("Missing Hangs")
+            return apology("Missing Cards")
 
-        # update this if statement to allow board cards to be empty
         if user1 not in deck or user2 not in deck or opp1 not in deck or opp2 not in deck:
             return apology("Invalid Cards")
 
@@ -235,7 +295,9 @@ def odds():
                 count += 1
         # checking if there is a board
         board = False
-        if count >= 3:
+        if count == 1 or count == 2:
+            return apology("Invalid Number of Board Cards")
+        elif count >= 3:
             board = True
 
         chosen_cards = [user1, user2, opp1, opp2,
@@ -249,7 +311,7 @@ def odds():
         # submitting inputs to function
         results = simulate(user1, user2, opp1, opp2, board,
                            board1, board2, board3, board4, board5)
-        return render_template("results.html", user1=user1, user2=user2, opp1=opp1, opp2=opp2, results=results)
+        return render_template("results.html", user1=user1, user2=user2, opp1=opp1, opp2=opp2, results=results, percentage=percentage)
 
 
 @ app.route("/tips", methods=["GET", "POST"])
