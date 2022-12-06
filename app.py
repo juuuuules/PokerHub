@@ -32,7 +32,7 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 
-# list of possible cards
+# list of all cards in deck
 deck = ["2h", "3h", "4h", "5h", "6h", "7h", "8h", "9h", "Th", "Jh", "Qh", "Kh", "Ah", "2d", "3d", "4d", "5d", "6d", "7d", "8d", "9d", "Td", "Jd", "Qd", "Kd",
         "Ad", "2s", "3s", "4s", "5s", "6s", "7s", "8s", "9s", "Ts", "Js", "Qs", "Ks", "As", "2c", "3c", "4c", "5c", "6c", "7c", "8c", "9c", "Tc", "Jc", "Qc", "Kc", "Ac"]
 
@@ -54,7 +54,7 @@ def register():
         password = request.form.get("password")
         confirmation = request.form.get("confirmation")
         error_message = ""
-
+        # registration requirements
         if email == "" or password == "" or confirmation == "":
             error_message = "Please fill out the required fields"
             return render_template("register.html", error_message=error_message)
@@ -155,7 +155,7 @@ def log():
     user_id = session["user_id"]
     hands = db.execute(
         "SELECT * FROM hands WHERE user_id = ?", (user_id,)).fetchall()
-
+    # SQL queries and python to calculate total winnings
     money_won_total = db.execute(
         "SELECT SUM(pot_size) FROM hands WHERE (user_id = ? AND result = ?)", (user_id, "WIN")).fetchall()[0][0]
     money_lost_total = db.execute(
@@ -165,6 +165,7 @@ def log():
     if money_lost_total is None:
         money_lost_total = 0
     winnings = money_won_total - money_lost_total
+    # SQL queries amd python to calculate best and worst hands
     hands_won = db.execute(
         "SELECT user_hand, SUM(pot_size) FROM hands WHERE result = ? AND user_id = ? GROUP BY user_hand", ("WIN", user_id)).fetchall()
     hands_lost = db.execute(
@@ -257,6 +258,7 @@ def ajax_add():
         hand = request.form["txthand"]
         result = request.form["txtresult"].upper()
         potsize = request.form["txtpot"]
+        # check if all inputs are appropriate
         if hand == "":
             msg = "Please input a hand."
         elif result == "":
@@ -266,6 +268,7 @@ def ajax_add():
             print(potsize)
         elif not potsize.isnumeric():
             msg = "Please input a numerical value for the size of the pot"
+        # if inputs are appropriate, then add to db
         else:
             db.execute("INSERT INTO hands (user_id, user_hand, result, pot_size) VALUES (?,?,?,?)", [
                 user_id, hand, result, potsize])
@@ -289,6 +292,7 @@ def ajax_update():
         print(f"hand:  {hand}")
         print(f"result: {result}")
         print(f"potsize: {pot_size}")
+        # check input requirements
         if hand == "":
             msg = "Please input a hand."
         elif result == "":
