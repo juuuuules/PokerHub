@@ -131,7 +131,8 @@
                     <label for="session1" class="accordion-label">Summary Statistics</label>
                     <div class="accordion-content">
                         <form action="/log" method="POST">
-                            <p>Total earnings................{{ convert_to_usd(total_winnings) }}</p>
+                            <!--<p>Total Hands Played............{{ hands_played }}</p>-->
+                            <p>Total Earnings................{{ convert_to_usd(total_winnings) }}</p>
                             <p>Best Hand.....................{{ best_hand }}</p>
                             <p>Worst Hand....................{{ worst_hand }}</p>
                             <div>Please enter a hand to look up. First, enter the two values corresponding to the two cards (1, 2, 3, ..., T, J, Q, K, A), then either an 'o' or an 's' to indicate whether the hand was suited or offsuit. For paired hands, there is no need to indicate suitedness.</div>
