@@ -194,7 +194,7 @@ def log():
     biggest_loss = 0
     worst_hand = None
     for lost_hands in hands_lost:
-        won_index_count += 1
+        lost_index_count += 1
         in_both = False
         for won_hands in hands_won:
             if lost_hands[0] == won_hands[0]:
@@ -202,10 +202,10 @@ def log():
                 current_hand = list(worst_hands[lost_index_count])
                 current_hand[1] = float(lost_hands[1]) - float(won_hands[1])
                 worst_hands[lost_index_count] = tuple(current_hand)
-                if current_hand[1] < biggest_loss:
+                if current_hand[1] > biggest_loss:
                     biggest_loss = current_hand[1]
                     worst_hand = current_hand[0]
-        if in_both == False and lost_hands[1] < biggest_loss:
+        if in_both == False and lost_hands[1] > biggest_loss:
             biggest_loss = lost_hands[1]
             worst_hand = lost_hands[0]
     # calculates number of hands played
